@@ -1,3 +1,6 @@
 # images
 data
 content
+*.npz
+*.zip
+tools.py
