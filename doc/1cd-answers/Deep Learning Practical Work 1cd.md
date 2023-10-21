@@ -101,3 +101,76 @@ IMAGE
 - As you move deeper into the network, the receptive field size continues to increase. This is primarily due to the stacking of convolutional layers and pooling layers with larger windows or strides.
 - Deeper layers have progressively larger receptive fields, allowing them to capture more global information and high-level features in the input image.
 - This increase in receptive field size is a fundamental aspect of hierarchical feature learning in deep CNNs. Features learned in deeper layers tend to represent more complex and abstract patterns.
+
+### 8. For convolutions, we want to keep the same spatial dimensions at the output as at the input. What padding and stride values are needed ?
+p=2, s=1
+
+### 9. For max poolings, we want to reduce the spatial dimensions by a factor of 2. What padding and stride values are needed ?
+p=0, s=2
+
+### 10.  For each layer, indicate the output size and the number of weights to learn. Comment on this repartition.
+in the code
+
+### 11. What is the total number of weights to learn ? Compare that to the number of examples.
+To calculate the total number of weights to learn in a neural network, you need to sum up the weights in all the layers of the network.
+1. Convolutional Layers:
+    - For each convolutional layer, you need to consider the number of input channels, the number of output channels (filters), the size of each filter, and whether or not there is a bias term. The formula for calculating the number of weights in a convolutional layer is:
+        Number of Weights = (Input Channels * Output Channels * Filter Height * Filter Width) + (Output Channels if there's a bias term)
+2. Fully Connected Layers:
+    - For each fully connected (linear) layer, you need to consider the number of input neurons and the number of output neurons, including bias terms. The formula for calculating the number of weights in a fully connected layer is:
+        Number of Weights = (Input Neurons * Output Neurons) + (Output Neurons if there's a bias term)
+3. Sum up the number of weights for all layers to find the total number of weights in your network.
+
+Method by hand:
+1. Convolutional Layer 1:
+    - Input Channels: `3` (assuming color images)
+    - Output Channels (Filters): `32`
+    - Filter Height: `5`
+    - Filter Width: `5`
+    - Bias Term: Yes
+    - Number of Weights = `(3 * 32 * 5 * 5) + 32 = 2432`
+2. Convolutional Layer 2:
+    - Input Channels: `32` (output from the previous layer)
+    - Output Channels (Filters): `64`
+    - Filter Height: `5`
+    - Filter Width: `5`
+    - Bias Term: Yes
+    - Number of Weights = `(32 * 64 * 5 * 5) + 64 = 51264`
+3. Convolutional Layer 3:
+    - Input Channels: `64` (output from the previous layer)
+    - Output Channels (Filters): `64`
+    - Filter Height: `5`
+    - Filter Width: `5`
+    - Bias Term: Yes
+    - Number of Weights = `(64 * 64 * 5 * 5) + 64 = 102464`
+4. Fully Connected Layer 4:
+    - Input Neurons: `64 * 4 * 4` (output from the last convolutional layer, which is 64 channels, each of size 4x4)
+    - Output Neurons: `1000`
+    - Bias Term: Yes
+    - Number of Weights = `(64 * 4 * 4 * 1000) + 1000 = 1025000`
+5. Fully Connected Layer 5:
+    - Input Neurons: `1000` (output from the previous fully connected layer)
+    - Output Neurons: `10` (assuming this is a classification layer)
+    - Bias Term: Yes
+    - Number of Weights = `(1000 * 10) + 10 = 10010`
+
+Now, let's sum up the number of weights from each layer:
+- Convolutional Layers: `2432 + 51264 + 102464 = 154160` weights
+- Fully Connected Layers: `1025000 + 10010 = 1035010` weights
+
+Total Number of Weights in the `ConvNet2` model: `154160 + 1035010 = 1199170` weights.
+
+Method coded:
+look at count_parameters() function in project1cd2.py:
+```python
+def count_parameters(self):
+	total_params = 0
+	for param in self.parameters():
+		total_params += param.numel()
+	return total_params
+```
+
+### 12. Compare the number of parameters to learn with that of the BoW and SVM approach.
+??????
+
+### 13. 
