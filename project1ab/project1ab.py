@@ -16,10 +16,16 @@ dtype = torch.float
 def init_params(nx, nh, ny):
     params = {}
 
-    params["Wh"] = torch.randn(nh, nx, device=device, dtype=dtype) * 0.3
-    params["Wy"] = torch.randn(ny, nh) * 0.3
-    params["bh"] = torch.zeros(1,nh) #broadcast
-    params["by"] = torch.zeros(1,ny) #broadcast
+    # params["Wh"] = torch.randn(nh, nx, device=device, dtype=dtype) * 0.3
+    # params["Wy"] = torch.randn(ny, nh) * 0.3
+    # params["bh"] = torch.zeros(1,nh) #broadcast
+    # params["by"] = torch.zeros(1,ny) #broadcast
+    #Initialize randomly
+    params["Wh"] = torch.randn(nx, nh) * 0.3
+    params["Wy"] = torch.randn(nh, ny) * 0.3
+    #Initialize as zero vectors
+    params["bh"] = torch.randn(nh) #* std
+    params["by"] = torch.randn(ny) #* std #
 
     return params
 
@@ -50,36 +56,65 @@ def forward(params, X):
     ny = params['Wy'].size(0)  # bias vector bh of size nh
     outputs = {}
 
-    outputs["X"] = X
+   #####################
+    ## Your code here  ##
+    #####################
+    # fill values for X, htilde, h, ytilde, yhat
 
-    # bh= params["bh"].expand(bsize, nh)
-    bh= params["bh"]
-    outputs["htilde"] = linear_affine_transformation(X,  params["Wh"], bh)
-    outputs["h"] = activation_function_tanh(outputs["htilde"])
+    Wh = params['Wh']
+    bh = params['bh']
+    Wy = params['Wy']
+    by = params['by']
 
-    # by = params["by"].expand(bsize, ny)
-    by = params["by"]
-    outputs["ytilde"] = linear_affine_transformation( outputs["h"], params["Wy"], by)
-    outputs["yhat"] = activation_function_softmax(outputs["ytilde"])
+    # Calculate htilde before activation of hidden layer --> make sure it works with batches
+    # htilde = torch.matmul(X, Wh) + bh #for numpy: params['Wh'] @ X + params["bh"]
+    htilde = torch.mm(X, Wh) + bh
+
+    # Apply the activation function tanh to get h (hidden layer activation)
+    h = torch.tanh(htilde)
+
+    #h = torch.relu(htilde)
+
+    # Calculate ytilde
+    ytilde = torch.matmul(h, Wy) + by
+
+    # Apply activation function for the output layer = softmax for multi-class classification
+    yhat = torch.softmax(ytilde, dim=1)
+
+    # yhat = ytilde
+    # Store intermediate values in outputs dictionary = cache
+    outputs["X"] = X #handover new X
+    outputs["htilde"] = htilde
+    outputs["h"] = h
+    outputs["ytilde"] = ytilde
+    outputs["yhat"] = yhat
+
+    ##      END        #
+    ####################
 
     return outputs['yhat'], outputs
 
 
 
 def loss_accuracy(Yhat, Y):
-    L = 0
-    acc = 0
+    assert Yhat.size() == Y.size() # catch dimension errors early on
+    epsilon = 1e-10
 
-    # Compute the cross-entropy loss
-    # L = -torch.mean(torch.sum(Y * torch.log(Yhat), dim=1), dim=0)
-    L= (Yhat - Y).pow(2).sum()
-    print("Loss: ", L)
+    #L = F.cross_entropy(Yhat, Y)
+    L = -torch.sum(Y * torch.log(Yhat + epsilon)) / Y.size(0) # normalize by batch size, add epsilon to avoir log errors
+    #L = - torch.mean(Y * torch.log(Yhat + epsilon))
+    #L.requires_grad = True
 
-    # Compute the precision (accuracy)
-    _, indsY = torch.max(Y, 1)
-    _, indsYhat = torch.max(Yhat, 1)
-    correct_predictions = torch.sum(indsY == indsYhat)
-    acc = correct_predictions/Y.shape[0]
+    # Get the predicted class labels by taking the argmax along axis 1 (columns)
+    _, indsY = torch.max(Yhat, 1)
+
+    # Convert one-hot encoded true labels back to class indices
+    _, inds_true = torch.max(Y, 1)
+
+    # Compare the predicted labels with the true labels and calculate accuracy
+    correct = torch.sum(indsY == inds_true)
+    total = Y.size(0)  # Number of samples in the batch
+    acc = correct.item() / total
 
     return L, acc
 
@@ -88,15 +123,55 @@ def loss_accuracy(Yhat, Y):
 def backward(params, outputs, Y):
     bsize = Y.shape[0]
     grads = {}
+    #####################
+    ## Your code here  ##
+    #####################
+    # fill values for Wy, Wh, by, bh
 
-    grad_ytilde = outputs["yhat"] - Y
-    grad_htilde = grad_ytilde.mm(params["Wy"]) * (1 - outputs["h"] ** 2)
+    # Retrieve intermediate values from the forward pass
+    X = outputs["X"]
+    htilde = outputs["htilde"]
+    h = outputs["h"]
+    ytilde = outputs["ytilde"]
+    yhat = outputs["yhat"]
 
-    grads["Wy"] = grad_ytilde.T.mm(outputs["h"])
-    grads["Wh"] = grad_htilde.T.mm(outputs["X"])
-    grads["by"] = torch.sum(grad_ytilde,0) #for broadcast
-    grads["bh"] = torch.sum(grad_htilde,0) #for broadcast
+    dWh = torch.zeros_like(params['Wh'])
+    dbh = torch.zeros_like(params['bh'])
+    dWy = torch.zeros_like(params['Wy'])
+    dby = torch.zeros_like(params['by'])
 
+    # Compute the gradient of the loss with respect to yhat (cross-entropy loss derivative)
+    # dyhat = (yhat - Y) / bsize
+
+    dyhat = yhat - Y
+
+    # Compute the gradients for the output layer
+    dWy += torch.matmul(h.t(), dyhat)  # dWy = h^T * dyhat
+    dby += torch.sum(dyhat, dim=0)     # dby = sum(dyhat)
+
+    # Compute the gradient for Wh and bh
+    dh = torch.matmul(dyhat, params["Wy"].t())
+    dhtilde = dh * (htilde > 0).float()  # Gradient for ReLU activation
+
+    # Backpropagate the gradients to the hidden layer
+    dh = torch.matmul(dyhat, params['Wy'].t())  # dh = dyhat * Wy^T
+    dh *= (1 - h * h)  # Gradient of tanh activation function
+
+    # Compute the gradients for the hidden layer
+    dWh += torch.matmul(X.t(), dh)  # dWh = X^T * dh
+    dbh += torch.sum(dh, dim=0)      # dbh = sum(dh)
+
+    # Store the gradients in a dictionary
+    grads = {
+        'Wh': dWh,
+        'bh': dbh,
+        'Wy': dWy,
+        'by': dby
+    }
+
+    ####################
+    ##      END        #
+    ####################
     return grads
 
 
@@ -131,7 +206,7 @@ print(params)
 curves = [[], [], [], []]
 
 # epoch
-for iteration in range(15):
+for iteration in range(150):
 
     # permute
     perm = np.random.permutation(N)
@@ -167,17 +242,17 @@ for iteration in range(15):
     title = 'Iter {}: Acc train {:.1f}% ({:.2f}), acc test {:.1f}% ({:.2f})'.format(
         iteration, acctrain, Ltrain, acctest, Ltest)
     print(title)
-    # data.plot_data_with_grid(Ygrid, title)
+    data.plot_data_with_grid(Ygrid, title)
 
     curves[0].append(acctrain)
     curves[1].append(acctest)
     curves[2].append(Ltrain)
     curves[3].append(Ltest)
 
-# fig = plt.figure()
-# plt.plot(curves[0], label="acc. train")
-# plt.plot(curves[1], label="acc. test")
-# plt.plot(curves[2], label="loss train")
-# plt.plot(curves[3], label="loss test")
-# plt.legend()
-# plt.show()
+fig = plt.figure()
+plt.plot(curves[0], label="acc. train")
+plt.plot(curves[1], label="acc. test")
+plt.plot(curves[2], label="loss train")
+plt.plot(curves[3], label="loss test")
+plt.legend()
+plt.show()
