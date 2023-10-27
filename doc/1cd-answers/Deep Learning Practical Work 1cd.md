@@ -258,7 +258,6 @@ Additionally, the error displayed during training is an average computed over di
 ...
 
 ### 16.  What are the effects of the learning rate and of the batch-size ?
-#TODO
 Convergence depends on the choice of η (eta, the learning rate): if it's too small, the model will take a long time to train, and if it's too large, the model may fail to converge. In practice, it's common to decrease η as training progresses.
 
 Moreover, depending on the amount of data used to compute the gradient, we have:
@@ -286,13 +285,14 @@ Experiment: epochs=20; lr=0.00001, batch_size=128
 **2. Changing Batch Size:**
 - **Small Batch Size:** Using a small batch size (e.g., 1, 32) can result in noisy updates. It can lead to faster convergence within an epoch, but the model's training can be less stable due to the randomness of each batch. It may also require more epochs to converge, and it may get stuck in local minima.
 Experiment: epochs=20; lr=0.1, batch_size=32
-
+![[Pasted image 20231027224604.png]]
+Experiment: epochs=20; lr=0.1, batch_size=8
+Time computation: 37seconds per each epoch (which is a lot more than the previous ones)
+![[Pasted image 20231027230737.png]]
 
 - **Large Batch Size:** A large batch size (e.g., 64, 128, 256) can provide more stable and accurate gradient estimates, resulting in smoother training curves. However, it may require more memory and can be computationally expensive. It might also converge to a wider minima rather than the optimal minima, which could affect generalization.
 Experiment: epochs=20; lr=0.1, batch_size=256
-
-
-- **Best**
+![[Pasted image 20231027231300.png]]
 
 
 ### 17. What is the error at the start of the first epoch, in train and test ? How can you interpret this ?
@@ -423,7 +423,9 @@ We tried to use the increased number of epochs:
 Experiment: batch_size=128, lr=0.1, epochs=100, cuda=True
 
 
-Conclusions
+## Conclusions
+Al the expeeriments were run on a GPU NVIDIA A100 80GB.
+
 The initial architecture was not good: the accuracy was too low (70%) and the loss presented some overfitting effects.
 Our best model has obtained an accuracy evaluation of more than 80 % with a loss evaluation of 0.6 and without any overfitting effects. To further analise the model, there are other metrics that could be used such as precision, recall, f1, etc...
 Another possibility is to train the model in a much larger dataset, such as ImageNet and choose a more complex architecture.
