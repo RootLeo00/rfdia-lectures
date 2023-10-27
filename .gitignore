@@ -4,3 +4,6 @@ content
 *.npz
 *.zip
 tools.py
+
+#python
+*/__pycache__
