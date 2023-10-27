@@ -1,3 +1,4 @@
+## 1.1 Supervised dataset
 ### 1. What are the train, val and test sets used for?
 When we would like to use a model for a specific task, we usually go through several passages. The main ones are the training, that is the time when you want your model to learn the task, the validation, that is when you would like validate your training (for example, understanding if it is over-fitting), then you finally test your model, asking it to do the task it was meant to do. It is important that each step has its own part of the data that are not the same of the other steps.  For example, if you test your model with the same data of the training, then you would probably get good results, but it would be like cheating. The same goes for using the val set also as the test set.
 In the end:
@@ -7,6 +8,7 @@ In the end:
 ### 2. What is the influence of the number of examples N ?
 Generally the higher the number of available examples, the better the results you get. If one trains a complex model with too little data, the model parameters will be overly adapted to the few training examples thus leading to over-fitting ( ⇒ see bias-variance trade-off for more info on over-fitting and model choice). Usually there is no downside on training a model with too many data, but only that it would be much more time consuming.
 
+## 1.2 Network architcture (forward)
 ### 3. Why is it important to add activation functions between linear transformations?
 First, it makes the combination of transformations (linear + activation) non-linear, thus justifying applying several transformations in a row. 
 This is because the composition of (multivariate) linear function would still be linear. Therefore, without the activation functions, the network would only be able to approximate combinations of linear functions. For more information, see the universal approximation theorem (one of the assumption is having a non-linearity σ)
@@ -16,7 +18,7 @@ Second, it allows to choose an output interval different from R^ny
 ### 4. What are the sizes nx, nh, ny in the figure 1? In practice, how are these sizes chosen?
 ![[Pasted image 20231012154658.png]]
 In theory, nx is determined by the size of the input data, therefore (apart from the choice of how to encode the input data) we do not have to choose this value. nh should be sufficiently large so as not to loose salient information in the process of passing data through the network but sufficiently small such that the NN can extract the most salient features. The smaller nh, the tighter the bottleneck of our neural network. ny is determined by the purpose of our NN. For classification, for example, ny depends on the number of output classes.
-Specifically, in figure 1 the size of nx is 2, ny is 2 and nh is 4. 
+Specifically, in figure 1 the size of nx is 2, ny is 2 and nh is 4.
 
 ### 5. What do the vectors ˆy and y represent? What is the difference between these two quantities?
 
@@ -28,8 +30,13 @@ The softmax function normalizes the output probabilities such that they add up t
 ### 7. Write the mathematical equations allowing to perform the forward pass of the neural network, i.e. allowing to successively produce ˜h, h, ˜y and ˆy starting at x.
 
 ![[Pasted image 20231012160845.png]]
-Instead of ReLu, we can use any other activation function.
+Instead of ReLu, we can use any other activation function, such as the tanh:
+ĥ= W_h*x + b_h
+h = tanh(ĥ)
+ỹ= W_y*h + b_y
+ŷ = SoftMax(ỹ)
 
+## 1.3 Loss function
 ### 8. During training, we try to minimize the loss function. For cross entropy and squared error, how must the ˆyi vary to decrease the global loss function L?
 For cross-entropy loss, you adjust ˆyi to align with true class probabilities,  while for squared error loss, you adjust ˆyi to minimize the squared differences between predictions and true values.
 Looking at the mathematical formula of the cross-entropy that is:
@@ -87,7 +94,7 @@ So, in contrast to cross-entropy loss, which doesn't penalize the model when the
 Why don't we use the CE for a regression problem? This is because in a regression problem we are dealing with continuous values. So even if our regression model gives an answer a little bit different from the ground truth it should not cost the model too much. 
 
 [reference](https://www.google.com/search?client=ubuntu-sn&hs=Lj1&sca_esv=572890011&channel=fs&sxsrf=AM9HkKnhQ3riOlpxj7AsMK1G-mbk8qtbEg:1697123750871&q=why+cross+entropy+for+classification&tbm=vid&source=lnms&sa=X&ved=2ahUKEwivw73S5vCBAxW6VKQEHa_-BlEQ0pQJegQICBAB&biw=1542&bih=807&dpr=1.2#fpstate=ive&vld=cid:d1ae8bea,vid:gIx974WtVb4,st:0)
-
+## 1.4 Optimization algorithm
 ### 10. What seem to be the advantages and disadvantages of the various variants of gradient descent between the classic, mini-batch stochastic and online stochastic versions? Which one seems the most reasonable to use in the general case?
 
 it computes the exact gradient of the loss function using the entire training dataset in each iteration therefore its more accurate and gives smoother convergence trajectory.
@@ -130,16 +137,12 @@ The total computational complexity of backpropagation is O(L * N), which scales 
 
 ![[Pasted image 20231012220849.png]]
 ![[Pasted image 20231012222513.png]]
-
+#TODO change the minus 
 
 ### 15. Write the gradient of the loss (cross-entropy ) relative to the intermediate output ˜y
 
 ![[Pasted image 20231012222543.png]]
-
-For the first formula:
-![[Pasted image 20231012231721.png]]
-Proof:
-![[Pasted image 20231012231653.png]]
+![[Pasted image 20231027212148.png]]
 
 ### 16. Using the backpropagation, write the gradient of the loss with respect to the weights of the output layer ∇Wy `. Note that writing this gradient uses ∇˜y`. Do the same for ∇by `.
 See: https://cs229.stanford.edu/main_notes.pdf
@@ -150,3 +153,6 @@ https://www.youtube.com/watch?v=tIpKfDc295M
 
 17.  Compute other gradients : ∇˜h`, ∇Wh `, ∇bh `
 ![[1ab-answer16-17_231021_142243.pdf]]
+
+
+#TODO check on other pdf

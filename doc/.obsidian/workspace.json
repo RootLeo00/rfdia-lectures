@@ -8,16 +8,6 @@
         "type": "tabs",
         "children": [
           {
-            "id": "30af2b09ef11282c",
-            "type": "leaf",
-            "state": {
-              "type": "pdf",
-              "state": {
-                "file": "1cd-answers/rdfia_1-cd.pdf"
-              }
-            }
-          },
-          {
             "id": "17821b0efe17261b",
             "type": "leaf",
             "state": {
@@ -26,6 +16,16 @@
                 "file": "1cd-answers/Deep Learning Practical Work 1cd.md",
                 "mode": "source",
                 "source": false
+              }
+            }
+          },
+          {
+            "id": "8ee5d554aa3972dc",
+            "type": "leaf",
+            "state": {
+              "type": "pdf",
+              "state": {
+                "file": "1cd-answers/rdfia_1-cd.pdf"
               }
             }
           }
@@ -95,7 +95,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "1cd-answers/rdfia_1-cd.pdf",
+                "file": "1cd-answers/Deep Learning Practical Work 1cd.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -112,7 +112,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "1cd-answers/rdfia_1-cd.pdf",
+                "file": "1cd-answers/Deep Learning Practical Work 1cd.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -135,7 +135,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "1cd-answers/rdfia_1-cd.pdf"
+                "file": "1cd-answers/Deep Learning Practical Work 1cd.md"
               }
             }
           }
@@ -156,26 +156,30 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "30af2b09ef11282c",
+  "active": "17821b0efe17261b",
   "lastOpenFiles": [
-    "1cd-answers/Deep Learning Practical Work 1cd.md",
+    "Pasted image 20231027224138.png",
+    "Pasted image 20231027223928.png",
+    "Pasted image 20231027223729.png",
+    "Pasted image 20231027223717.png",
+    "Pasted image 20231027223453.png",
     "1cd-answers/rdfia_1-cd.pdf",
-    "1ab-answers/backpropagation_cheatsheet_less2.pdf",
-    "1ab-answers/Pasted image 20231012174743.png",
-    "1cd-answers",
-    "1ab-answers/1ab-answer16-17_231021_142243.pdf",
-    "1ab-answers/Screenshot 2023-10-14 at 5.19.04 PM.png",
-    "1ab-answers/rdfia_1-ab.pdf",
-    "1ab-answers/Screenshot 2023-10-14 at 5.19.10 PM.png",
-    "1ab-answers/Pasted image 20231013153617.png",
-    "1ab-answers/Pasted image 20231013150005.png",
-    "1ab-answers/Pasted image 20231013113620.png",
-    "1ab-answers/Pasted image 20231013113239.png",
-    "1ab-answers/Pasted image 20231013112331.png",
-    "1ab-answers/Pasted image 20231013105253.png",
-    "1ab-answers/Pasted image 20231012231721.png",
-    "1ab-answers/gradient-notes.pdf",
+    "1cd-answers/Deep Learning Practical Work 1cd.md",
+    "1e-answers/Pasted image 20231027215433.png",
+    "1e-answers/Transformers.md",
+    "1e-answers/Pasted image 20231027215536.png",
+    "1e-answers/Pasted image 20231027215512.png",
+    "1e-answers/Transformers",
+    "1cd-answers/Pasted image 20231021171542.png",
+    "1e-answers",
+    "1cd-answers/Pasted image 20231027182339.png",
+    "1cd-answers/Pasted image 20231027213348.png",
     "1ab-answers/Deep Learning Practical Work 1-ab.md",
+    "1ab-answers/rdfia_1-ab.pdf",
+    "1ab-answers/backpropagation_cheatsheet_less2.pdf",
+    "1ab-answers/1ab-answer16-17_231021_142243.pdf",
+    "1cd-answers",
+    "1ab-answers/gradient-notes.pdf",
     "1ab-answers"
   ]
 }
