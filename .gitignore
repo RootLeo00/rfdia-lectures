@@ -11,3 +11,5 @@ tools.py
 
 #obsidian
 *.obsidian
+*/.obsidian/*
+doc/.obsidian/*
