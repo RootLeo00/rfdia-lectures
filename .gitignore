@@ -6,4 +6,8 @@ content
 tools.py
 
 #python
-*/__pycache__
+*__pycache__
+
+
+#obsidian
+*.obsidian
