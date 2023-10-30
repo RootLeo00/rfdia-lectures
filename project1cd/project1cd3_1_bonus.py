@@ -143,7 +143,7 @@ def main_CIFAR_standardized(batch_size, lr, epochs, cuda):
         # Test phase
         top1_acc_test, top5_acc_test, loss_test = epoch(test, model, criterion, cuda=cuda)
         # plot
-        # plot.update(loss.avg, loss_test.avg, top1_acc.avg, top1_acc_test.avg)
+        plot.update(loss.avg, loss_test.avg, top1_acc.avg, top1_acc_test.avg)
 
         #save data into a dataframe
         newdf_train = pd.DataFrame([[loss.val, top1_acc.val, avg_top5_acc.val]], columns=['loss', 'top1_acc', 'top5_acc'])
