@@ -54,10 +54,10 @@ def get_dataset_CIFAR(batch_size, cuda=True):
     train_dataset = datasets.CIFAR10(PATH, train=True, download=True,
         transform=transforms.Compose([
             transforms.ToTensor(),
-            transforms.Normalize(mean=mean_CIFAR, std=sig_CIFAR),
             transforms.RandomCrop(size = 28),
-            transforms.RandomHorizontalFlip(p=0.5)
-        ]))
+            transforms.RandomHorizontalFlip(p=0.5),
+            transforms.Normalize(mean=mean_CIFAR, std=sig_CIFAR),
+        ])) 
 
 
     val_dataset = datasets.CIFAR10(PATH, train=False, download=True,
@@ -84,8 +84,8 @@ def main_CIFAR_3_3(batch_size, lr, epochs, cuda):
     # define model, loss, optim
     model = ConvNet2()
     criterion = nn.CrossEntropyLoss()
-    # optimizer = torch.optim.SGD(model.parameters(), lr, momentum=0.9)
-    optimizer = torch.optim.Adam(model.parameters(), lr)
+    optimizer = torch.optim.SGD(model.parameters(), lr, momentum=0.9)
+    # optimizer = torch.optim.Adam(model.parameters(), lr)
     lr_sched = lr_scheduler.ExponentialLR(optimizer, gamma=0.95)
 
     if cuda: # only with GPU, and not with CPU
@@ -113,4 +113,4 @@ def main_CIFAR_3_3(batch_size, lr, epochs, cuda):
 
         lr_sched.step()
 
-main_CIFAR_3_3(batch_size=128, lr=0.1, epochs=50, cuda=True)
+main_CIFAR_3_3(batch_size=128, lr=0.01, epochs=50, cuda=True)
