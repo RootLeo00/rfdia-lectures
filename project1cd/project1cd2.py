@@ -21,7 +21,7 @@ PATH="datasets"
 
 # styling and helper packages
 
-import seaborn as sns
+# import seaborn as sns
 from tqdm import tqdm
 import matplotlib as mpl
 
@@ -29,8 +29,8 @@ import matplotlib as mpl
 mpl.rcParams.update(mpl.rcParamsDefault)
 mpl.rcParams['lines.markersize'] = 4
 
-#plt.style.use('ggplot')
-plt.style.use('seaborn-white')
+# plt.style.use('ggplot')
+# plt.style.use('seaborn-white')
 #mpl.rcParams['lines.linewidth'] = 2
 #mpl.rcParams['lines.linestyle'] = '--'
 
@@ -139,9 +139,9 @@ def main_CIFAR(batch_size, lr, epochs, cuda=True):
     train, test = get_dataset_CIFAR(batch_size, cuda)
 
     # init plots
-    # plot = AccLossPlot()
-    # global loss_plot
-    # loss_plot = TrainLossPlot()
+    plot = AccLossPlot()
+    global loss_plot
+    loss_plot = TrainLossPlot()
     
     #initialize dataframe df
     df_train = pd.DataFrame(columns=['loss', 'top1_acc', 'top5_acc'])
@@ -164,7 +164,7 @@ def main_CIFAR(batch_size, lr, epochs, cuda=True):
         df_test = pd.concat([df_test, newdf_test], axis=0) # merge across rows (it means that the number of columns should be the same, and we are increasing vertically)
         
         # plot
-        # plot.update(loss.avg, loss_test.avg, top1_acc.avg, top1_acc_test.avg)
+        plot.update(loss.avg, loss_test.avg, top1_acc.avg, top1_acc_test.avg)
 
     # save df to a file
     df_train.to_csv('results/results_train_1cd2.csv')
@@ -175,7 +175,7 @@ if __name__ == '__main__':
     #start training on CIFAR
     print('Starting training on CIFAR10')
     print('using device: ', device)
-    main_CIFAR(batch_size=256, lr=0.1, epochs=100, cuda=True)
+    main_CIFAR(batch_size=128, lr=0.1, epochs=50, cuda=True)
 
 
 # # --------------------------2.3 - Network visualization -----------------------------------------------

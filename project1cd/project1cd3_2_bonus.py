@@ -11,7 +11,7 @@ import torch.utils.data
 import torchvision.transforms as transforms
 import torchvision.datasets as datasets
 
-from convnet2_3 import ConvNet2
+from convnet2 import ConvNet2
 from epoch import epoch
 
 from utils import *
@@ -35,12 +35,72 @@ import matplotlib as mpl
 #mpl.rcParams['lines.linewidth'] = 2
 #mpl.rcParams['lines.linestyle'] = '--'
 
+"""## 3.2 Increase in the number of training examples by data increase
+
+### Modify network architecture
+"""
+
+# Transformation functions
+def add_noise(image, noise_level=0.1):
+    noise = torch.randn_like(torch.Tensor(image)) * noise_level
+    noisy_image = image + noise
+    return noisy_image
 
 
-"""## 3.3 Variants of the optimization algorithm"""
+class ConvNet2(nn.Module):
+
+    def __init__(self, channels = 3):
+        super(ConvNet2, self).__init__()
+
+        self.channels = channels # to handle color images
+        self.conv1 = 32
+        self.conv2 = 64
+        self.conv3 = 64
+        self.fc4 = 1000
+        self.fc5 = 10
+
+        # conv net as feature extractor
+        self.features = nn.Sequential(
+            #--> input: 4x3x28x28 (color image)
+
+            nn.Conv2d(self.channels, 32, (5, 5), stride=1, padding=2),
+            nn.ReLU(),
+            nn.MaxPool2d((2, 2), stride=2, padding=0), # --> output: [4, 32, 16, 16]
+
+            nn.Conv2d(32, 64, (5, 5), stride=1, padding=2),
+            nn.ReLU(),
+            nn.MaxPool2d((2, 2), stride=2, padding=0), #--> ouput: [4, 64, 8, 8])
+
+            nn.Conv2d(64, 64, (5, 5), stride=1, padding=2),
+            nn.ReLU(),
+            nn.MaxPool2d((2, 2), stride=2, padding=0, ceil_mode = True), #--> output: [4, 64, 4, 4]) #ceil_mode = True
+        )
+
+        self.classifier = nn.Sequential(
+            nn.Linear(64 * 4 * 4, self.fc4),
+            nn.ReLU(),
+            nn.Linear(self.fc4, self.fc5),
+
+            # Reminder: The softmax is included in the loss, do not put it here
+            # nn.Softmax()
+        )
 
 
-def get_dataset_CIFAR(batch_size, cuda=True):
+    def forward(self, input):
+        bsize = input.size(0) # batch size
+        output = self.features(input) # output of the conv layers
+        output = output.view(bsize, -1) # we flatten the 2D feature maps into one 1D vector for each input
+        #print(output.shape)
+        output = self.classifier(output) # we compute the output of the fc layers
+
+
+        return output
+
+"""### Modify call to datas for more data augmentations"""
+
+# adapting the dataset function to CIFAR10
+
+def get_dataset_CIFAR(batch_size, cuda=False):
     """
     This function loads the dataset and performs transformations on each
     image (listed in `transform = ...`).
@@ -54,9 +114,12 @@ def get_dataset_CIFAR(batch_size, cuda=True):
     train_dataset = datasets.CIFAR10(PATH, train=True, download=True,
         transform=transforms.Compose([
             transforms.ToTensor(),
-            transforms.Normalize(mean=mean_CIFAR, std=sig_CIFAR),
             transforms.RandomCrop(size = 28),
-            transforms.RandomHorizontalFlip(p=0.5)
+            transforms.RandomHorizontalFlip(p=0.5),
+            # transforms.ColorJitter(brightness=(0.1,0.6), contrast=1,saturation=0, hue=0.4)
+            transforms.RandomRotation(degrees=66),
+            transforms.RandomCrop(size=(224,312)),
+            transforms.Normalize(mean=mean_CIFAR, std=sig_CIFAR),
         ]))
 
 
@@ -73,11 +136,9 @@ def get_dataset_CIFAR(batch_size, cuda=True):
 
     return train_loader, val_loader
 
+"""### New main function"""
 
-# Import the package
-from torch.optim import lr_scheduler
-
-def main_CIFAR_3_3(batch_size, lr, epochs, cuda):
+def main_CIFAR_standardized(batch_size, lr, epochs, cuda):
 
     #   {"batch_size": 128, "epochs": 5, "lr": 0.1}
 
@@ -85,7 +146,6 @@ def main_CIFAR_3_3(batch_size, lr, epochs, cuda):
     model = ConvNet2()
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.SGD(model.parameters(), lr)
-    lr_sched = lr_scheduler.ExponentialLR(optimizer, gamma=0.95)
 
     if cuda: # only with GPU, and not with CPU
         cudnn.benchmark = True
@@ -110,6 +170,6 @@ def main_CIFAR_3_3(batch_size, lr, epochs, cuda):
         # plot
         plot.update(loss.avg, loss_test.avg, top1_acc.avg, top1_acc_test.avg)
 
-        lr_sched.step()
+main_CIFAR_standardized(batch_size = 128, lr=0.1, epochs = 50, cuda = True)
 
-main_CIFAR_3_3(batch_size=128, lr=0.1, epochs=50, cuda=True)
+

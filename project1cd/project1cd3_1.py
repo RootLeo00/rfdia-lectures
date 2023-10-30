@@ -26,7 +26,7 @@ mpl.rcParams.update(mpl.rcParamsDefault)
 mpl.rcParams['lines.markersize'] = 4
 
 #plt.style.use('ggplot')
-plt.style.use('seaborn-white')
+# plt.style.use('seaborn-white')
 #mpl.rcParams['lines.linewidth'] = 2
 #mpl.rcParams['lines.linestyle'] = '--'
 """# Part 3 : Results improvements
@@ -38,7 +38,7 @@ plt.style.use('seaborn-white')
 
 #--> psydo code: for conv layer in self.features : do this
 
-def get_dataset_CIFAR_improved(batch_size, cuda=False):
+def get_dataset_CIFAR_improved(batch_size, cuda=True):
     """
     This function loads the dataset and performs transformations on each
     image (listed in `transform = ...`).
@@ -71,7 +71,7 @@ def get_dataset_CIFAR_improved(batch_size, cuda=False):
 
 # make modifications to main function to accomodate CIFAR10
 
-def main_CIFAR_standardized(batch_size=128, lr=0.1, epochs=5, cuda=False):
+def main_CIFAR_standardized(batch_size, lr, epochs, cuda):
 
     # ex :
     #   {"batch_size": 128, "epochs": 5, "lr": 0.1}
@@ -107,7 +107,7 @@ def main_CIFAR_standardized(batch_size=128, lr=0.1, epochs=5, cuda=False):
         # Test phase
         top1_acc_test, top5_acc_test, loss_test = epoch(test, model, criterion, cuda=cuda)
         # plot
-        # plot.update(loss.avg, loss_test.avg, top1_acc.avg, top1_acc_test.avg)
+        plot.update(loss.avg, loss_test.avg, top1_acc.avg, top1_acc_test.avg)
 
         #save data into a dataframe
         newdf_train = pd.DataFrame([[loss.val, top1_acc.val, avg_top5_acc.val]], columns=['loss', 'top1_acc', 'top5_acc'])
@@ -123,5 +123,4 @@ def main_CIFAR_standardized(batch_size=128, lr=0.1, epochs=5, cuda=False):
     
 
 #start training on CIFAR
-
-main_CIFAR_standardized(128, 0.1, cuda=True, epochs = 10)
+main_CIFAR_standardized(batch_size=128, lr=0.1, epochs = 50, cuda=True)

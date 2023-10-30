@@ -19,16 +19,16 @@ PATH="datasets"
 
 # styling and helper packages
 
-import seaborn as sns
+# import seaborn as sns
 from tqdm import tqdm
 import matplotlib as mpl
 
 #sns.set_theme()
-mpl.rcParams.update(mpl.rcParamsDefault)
-mpl.rcParams['lines.markersize'] = 4
+# mpl.rcParams.update(mpl.rcParamsDefault)
+# mpl.rcParams['lines.markersize'] = 4
 
 #plt.style.use('ggplot')
-plt.style.use('seaborn-white')
+# plt.style.use('seaborn-white')
 #mpl.rcParams['lines.linewidth'] = 2
 #mpl.rcParams['lines.linestyle'] = '--'
 
@@ -167,7 +167,7 @@ def epoch(data, model, criterion, optimizer=None, cuda=False):
     return avg_top1_acc, avg_top5_acc, avg_loss
 
 
-def main(batch_size=128, lr=0.1, epochs=5, cuda=False):
+def main(batch_size, lr, epochs, cuda):
 
     # ex :
     #   {"batch_size": 128, "epochs": 5, "lr": 0.1}
@@ -200,5 +200,5 @@ def main(batch_size=128, lr=0.1, epochs=5, cuda=False):
         # plot
         plot.update(loss.avg, loss_test.avg, top1_acc.avg, top1_acc_test.avg)
 
-main(128, 0.1, cuda=True)
+main(batch_size=256, lr=0.1, epochs=20, cuda=True)
 

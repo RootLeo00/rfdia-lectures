@@ -11,7 +11,6 @@ import torch.utils.data
 import torchvision.transforms as transforms
 import torchvision.datasets as datasets
 
-from convnet2_3 import ConvNet2
 from epoch import epoch
 
 from utils import *
@@ -26,6 +25,8 @@ PATH="datasets"
 from tqdm import tqdm
 import matplotlib as mpl
 
+from torch.optim import lr_scheduler
+
 #sns.set_theme()
 # mpl.rcParams.update(mpl.rcParamsDefault)
 # mpl.rcParams['lines.markersize'] = 4
@@ -36,8 +37,8 @@ import matplotlib as mpl
 #mpl.rcParams['lines.linestyle'] = '--'
 
 
+"""## 3.5 Batch normalization"""
 
-"""## 3.3 Variants of the optimization algorithm"""
 
 
 def get_dataset_CIFAR(batch_size, cuda=True):
@@ -74,15 +75,65 @@ def get_dataset_CIFAR(batch_size, cuda=True):
     return train_loader, val_loader
 
 
-# Import the package
-from torch.optim import lr_scheduler
+class ConvNet2_batch(nn.Module):
 
-def main_CIFAR_3_3(batch_size, lr, epochs, cuda):
+    def __init__(self, channels = 3):
+        super(ConvNet2_batch, self).__init__()
+
+        self.channels = channels # to handle color images
+        self.conv1 = 32
+        self.conv2 = 64
+        self.conv3 = 64
+        self.fc4 = 1000
+        self.fc5 = 10
+
+        # conv net as feature extractor
+        self.features = nn.Sequential(
+            #--> input: 4x3x28x28 (color image)
+
+            nn.Conv2d(self.channels, 32, (5, 5), stride=1, padding=2),
+            nn.BatchNorm2d(num_features = self.conv1),
+            nn.ReLU(),
+            nn.MaxPool2d((2, 2), stride=2, padding=0), # --> output: [4, 32, 16, 16]
+
+            nn.Conv2d(32, 64, (5, 5), stride=1, padding=2),
+            nn.BatchNorm2d(num_features = self.conv2),
+            nn.ReLU(),
+            nn.MaxPool2d((2, 2), stride=2, padding=0), #--> ouput: [4, 64, 8, 8])
+
+            nn.Conv2d(64, 64, (5, 5), stride=1, padding=2),
+            nn.BatchNorm2d(num_features = self.conv3),
+            nn.ReLU(),
+            nn.MaxPool2d((2, 2), stride=2, padding=0, ceil_mode = True), #--> output: [4, 64, 4, 4]) #ceil_mode = True
+        )
+
+        self.classifier = nn.Sequential(
+            nn.Linear(64 * 4 * 4, self.fc4),
+            nn.ReLU(),
+            #nn.Dropout(p = 0.5),
+            nn.Linear(self.fc4, self.fc5),
+
+            # Reminder: The softmax is included in the loss, do not put it here
+            # nn.Softmax()
+        )
+
+
+    def forward(self, input):
+        bsize = input.size(0) # batch size
+        output = self.features(input) # output of the conv layers
+        output = output.view(bsize, -1) # we flatten the 2D feature maps into one 1D vector for each input
+        #print(output.shape)
+        output = self.classifier(output) # we compute the output of the fc layers
+
+
+        return output
+
+def main_CIFAR_batch(batch_size, lr, epochs, cuda):
 
     #   {"batch_size": 128, "epochs": 5, "lr": 0.1}
 
     # define model, loss, optim
-    model = ConvNet2()
+    model = ConvNet2_batch()
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.SGD(model.parameters(), lr)
     lr_sched = lr_scheduler.ExponentialLR(optimizer, gamma=0.95)
@@ -112,4 +163,5 @@ def main_CIFAR_3_3(batch_size, lr, epochs, cuda):
 
         lr_sched.step()
 
-main_CIFAR_3_3(batch_size=128, lr=0.1, epochs=50, cuda=True)
+main_CIFAR_batch(batch_size=128, lr=0.1, epochs=100, cuda=True)
+

@@ -11,7 +11,7 @@ import torch.utils.data
 import torchvision.transforms as transforms
 import torchvision.datasets as datasets
 
-from project1cd1 import ConvNet2
+from convnet2 import ConvNet2
 from epoch import epoch
 
 from utils import *
@@ -22,16 +22,16 @@ PATH="datasets"
 
 # styling and helper packages
 
-import seaborn as sns
+# import seaborn as sns
 from tqdm import tqdm
 import matplotlib as mpl
 
 #sns.set_theme()
-mpl.rcParams.update(mpl.rcParamsDefault)
-mpl.rcParams['lines.markersize'] = 4
+# mpl.rcParams.update(mpl.rcParamsDefault)
+# mpl.rcParams['lines.markersize'] = 4
 
 #plt.style.use('ggplot')
-plt.style.use('seaborn-white')
+# plt.style.use('seaborn-white')
 #mpl.rcParams['lines.linewidth'] = 2
 #mpl.rcParams['lines.linestyle'] = '--'
 
@@ -160,6 +160,6 @@ def main_CIFAR_standardized(batch_size=128, lr=0.1, epochs=5, cuda=False):
         # plot
         plot.update(loss.avg, loss_test.avg, top1_acc.avg, top1_acc_test.avg)
 
-main_CIFAR_standardized(batch_size = 128, lr=0.1, epochs = 10, cuda = True)
+main_CIFAR_standardized(batch_size = 128, lr=0.1, epochs = 50, cuda = True)
 
 

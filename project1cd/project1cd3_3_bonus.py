@@ -84,7 +84,8 @@ def main_CIFAR_3_3(batch_size, lr, epochs, cuda):
     # define model, loss, optim
     model = ConvNet2()
     criterion = nn.CrossEntropyLoss()
-    optimizer = torch.optim.SGD(model.parameters(), lr)
+    # optimizer = torch.optim.SGD(model.parameters(), lr, momentum=0.9)
+    optimizer = torch.optim.Adam(model.parameters(), lr)
     lr_sched = lr_scheduler.ExponentialLR(optimizer, gamma=0.95)
 
     if cuda: # only with GPU, and not with CPU

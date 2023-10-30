@@ -50,20 +50,26 @@ class ZCA_whitening(object):
         self.computed_pca = computed_pca
 
     def __call__(self, sample):
-        return {'image': self.vtoimg(self.whiten(self.computed_pca, sample))}
+        whitened_image = self.vtoimg(self.whiten(self.computed_pca, sample))
+        whitened_image = whitened_image.transpose(2, 0, 1)
+        torch_tensor = torch.tensor(whitened_image)
+        torch_tensor = torch_tensor.to(torch.float32)
+        return torch_tensor
 
     def vtoimg(self, v):
-        return np.array(np.clip(v, 0, 255), dtype=np.uint8).reshape(3,32,32).transpose([1,2,0])
+        return np.array(v, dtype=np.uint8).reshape(3,32,32).transpose([1,2,0]) / 255.0
+        # return np.array(np.clip(v, 0, 255), dtype=np.uint8).reshape(3,32,32).transpose([1,2,0])
 
     def whiten(self, pca, vec):
-        QQ = np.dot(vec - pca.mean_, pca.components_.T)
+        _vec = vec.reshape(vec.shape[0] * vec.shape[1] * vec.shape[2])
+        QQ = np.dot(_vec - pca.mean_, pca.components_.T)
         return np.dot(QQ / pca.singular_values_, pca.components_) * np.sqrt(60000) * 64 + 128
 
 
 # ----------------------------------------------------------------------------------------------
 
 
-def get_dataset_CIFAR_improved(batch_size, cuda=False):
+def get_dataset_CIFAR_improved(batch_size, cuda=True):
     """
     This function loads the dataset and performs transformations on each
     image (listed in `transform = ...`).
@@ -80,7 +86,7 @@ def get_dataset_CIFAR_improved(batch_size, cuda=False):
     train_dataset = datasets.CIFAR10(PATH, train=True, download=True,
         transform=transforms.Compose([
             transforms.ToTensor(),
-            zca_transform
+            zca_transform,
             # transforms.Normalize(mean=mean_CIFAR, std=sig_CIFAR),
         ]))
 
@@ -88,7 +94,7 @@ def get_dataset_CIFAR_improved(batch_size, cuda=False):
     val_dataset = datasets.CIFAR10(PATH, train=False, download=True,
         transform=transforms.Compose([
             transforms.ToTensor(),
-            zca_transform
+            zca_transform,
             # transforms.Normalize(mean=mean_CIFAR, std=sig_CIFAR) #should we noramlize the validation set as well?
         ]))
 
@@ -101,7 +107,7 @@ def get_dataset_CIFAR_improved(batch_size, cuda=False):
 
 # make modifications to main function to accomodate CIFAR10
 
-def main_CIFAR_standardized(batch_size=128, lr=0.1, epochs=5, cuda=False):
+def main_CIFAR_standardized(batch_size, lr, epochs, cuda):
 
     # ex :
     #   {"batch_size": 128, "epochs": 5, "lr": 0.1}
@@ -142,16 +148,16 @@ def main_CIFAR_standardized(batch_size=128, lr=0.1, epochs=5, cuda=False):
         #save data into a dataframe
         newdf_train = pd.DataFrame([[loss.val, top1_acc.val, avg_top5_acc.val]], columns=['loss', 'top1_acc', 'top5_acc'])
         newdf_test = pd.DataFrame([[loss_test.val, top1_acc_test.val, top5_acc_test.val]], columns=['loss', 'top1_acc', 'top5_acc'])
-        
+
         # concat newdf to df
         df_train = pd.concat([df_train, newdf_train], axis=0) # merge across rows (it means that the number of columns should be the same, and we are increasing vertically)
         df_test = pd.concat([df_test, newdf_test], axis=0) # merge across rows (it means that the number of columns should be the same, and we are increasing vertically)
-    
+
     # save df to a file
     df_train.to_csv('results/results_train_1cd3.csv')
     df_test.to_csv('results/results_val_1cd3.csv')
-    
+
 
 #start training on CIFAR
 
-main_CIFAR_standardized(128, 0.1, cuda=True, epochs = 10)
+main_CIFAR_standardized(batch_size=128, lr=0.1, epochs=50, cuda=True)
