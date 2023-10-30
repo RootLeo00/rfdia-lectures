@@ -15,5 +15,7 @@ tools.py
 doc/.obsidian/*
 
 #datatsets
-datatsets/*
+*/datatsets/*
 
+project1cd/datasets/*
+project1ab/datasets/*
