@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "a7ce9fe344d68fb9",
+        "id": "7d9c5641692abfc3",
         "type": "tabs",
         "children": [
           {
-            "id": "52df85c3ac340965",
+            "id": "642f0d6c577cc581",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -81,6 +81,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "1ab-answers/external-notes/gradient-notes.pdf",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -97,6 +98,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "1ab-answers/external-notes/gradient-notes.pdf",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -118,7 +120,9 @@
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {}
+              "state": {
+                "file": "1ab-answers/external-notes/gradient-notes.pdf"
+              }
             }
           }
         ]
@@ -138,8 +142,11 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "52df85c3ac340965",
+  "active": "d316f7d07bfa8df7",
   "lastOpenFiles": [
+    "1ab-answers/external-notes/1ab-answer16-17_231021_142243.pdf",
+    "1ab-answers/external-notes/backpropagation_cheatsheet_less2.pdf",
+    "1ab-answers/external-notes",
     "1cd-answers/images/Pasted image 20231021171542.png",
     "1ab-answers/images/Screenshot 2023-10-14 at 5.19.10 PM.png",
     "1cd-answers/images",
@@ -158,11 +165,8 @@
     "1cd-answers/images/Pasted image 20231029162452.png",
     "1ab-answers/images/Screenshot 2023-10-14 at 5.19.04 PM.png",
     "1ab-answers/images/Pasted image 20231030123940.png",
-    "1ab-answers/images/Pasted image 20231013150005.png",
     "1ab-answers/Deep Learning Practical Work 1-ab.pdf",
-    "1ab-answers/1ab-answer16-17_231021_142243.pdf",
     "1ab-answers/rdfia_1-ab.pdf",
-    "1ab-answers/gradient-notes.pdf",
-    "1e-answers/Transformers"
+    "1ab-answers/external-notes/gradient-notes.pdf"
   ]
 }
