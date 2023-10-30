@@ -4,65 +4,64 @@ The output size of a convolutional layer can be calculated using the following f
 
 1. **Output Size**:
     
-    For a single convolution filter with padding pp, stride s, and kernel size k applied to an input of size x×y×z, the output size will be:
+    For a single convolution filter with padding p, stride s, and kernel size k applied to an input of size x × y × z, the output size will be:
     
-    x' = [(x + 2p - k)/s] + 1
-	y' = [(y + 2p - k)/s] + 1
+    $x' = [\frac{(x + 2p - k)}{s}] + 1$
+	$y' = [\frac{(y + 2p - k)}{s}] + 1$
     
-    The output depth is determined by the number of filters in the layer. Each filter produces one channel in the output.
+    The output depth is determined by the number of filters in the layer. Each filter produces one channel in the output. Notice that, the "2p" is inteded to be as define in the pytorch documentation. See reference: https://pytorch.org/docs/stable/generated/torch.nn.Conv2d.html .
     
 2. **Number of Weights to Learn**:
+    The number of weights to learn in a convolutional layer is determined by the kernel size and the number of input channels. For each filter, you have k x k x c weights, where k is the kernel size, and c is the number of input channels.
     
-    The number of weights to learn in a convolutional layer is determined by the kernel size and the number of input channels. For each filter, you have kxkxc weights, where k is the kernel size, and c is the number of input channels.
-    
-    So, the total number of weights for one filter is k×k×c, and if you have N filters in the layer, you'll have N×k×k×c weights to learn.
+    So, the total number of weights for one filter is k×k×c, and if you have N filters in the layer, you'll have N × k × k × c weights to learn.
     
 3. **Comparison to Fully-Connected Layer**:
-    
-    If a fully-connected layer were to produce an output of the same size as the convolutional layer, you would have to connect each input neuron to each output neuron. In this case, the number of weights in the fully-connected layer would be x×y×z for each output neuron.
+    If a fully-connected layer were to produce an output of the same size as the convolutional layer, you would have to connect each input neuron to each output neuron. In this case, the number of weights in the fully-connected layer would be x × y × z for each output neuron.
 
 ### 2. What are the advantages of convolution over fully-connected layers ? What is its main limit ?
-There are 2 main problems of the brute force fully connection of images:
-- in the MLP where you have fully connected layers only the representation of the input is not stable with respect to some variation. For example, what we expect for good visual representation is that if you have small variations/deformations in the input, then you should get a representation that is similar to the original input. The information should stay the same. On the other side, if you have a large variation, you should get a very dissimilar representation from the original one. This kind of stability is necessessary expecially when you want to extract a semantic freature of the input (such in a semantic segmentation task). In the case o fully connected models we do not have this stability: small changes in the input can result in significant changes in the network's output. For example, if you translate an image slightly, a fully connected network may not recognize the same pattern as in the original position. 
-For example, in the figure below, you see that the green dots and the red dots are closed to each other, and you if you flatten the pixeled-image you would get the vestor of black and white input that is shown. If we shift the black pixels of 2 positions in the right, we would get a large number of input neuron that would switch from white to black and viceversa (here, about 150), that leads to a very different image representation. 
-![[Pasted image 20231013112331.png]]
-What's even worse is that if you take an input image and you randomly permute its pixels and you train it in a fully connected nn, you would get similar results as if you trained it with the non-permuted original image! This means that the topology of the image is completely ignored.
+There are two main problems with the brute-force fully connected approach for images:
 
-- There is a larger number of weights compared to the convolutional layer, making it computationally expensive and prone to overfitting, especially when the input size is large.
-	Example:
-	If you have an image that is 1000x1000 then after flattening it you would get an input vector of 10^6 (11 million) parameters. If then you choose again to have an hidden layer of the same size of the previous layer, then you have a hidden layer of 10^6 parameters and each neuron is fully connected to every previous neuron, meaning that you get 10^6x10^6 number of parameters in all that hidden layer. This is a lot to store in normal computers and it is just one layer (probelm of scalability)!
-	
+1) In the case of the **MLP** with only fully connected layers, the stability of the input representation is compromised with respect to variations. An ideal visual representation should maintain similarity for small variations or deformations in the input, ensuring that the information remains consistent. Conversely, for larger variations, the representation should be notably different from the original input. This kind of stability is crucial, especially when extracting semantic features from the input, as in semantic segmentation tasks. However, in fully connected models, this stability is lacking: small changes in the input can lead to significant alterations in the network's output. For instance, a slightly translated image might cause a fully connected network to fail in recognizing the same pattern as in the original position.
+
+	Consider the example in the figure below, where the green and red dots are near each other, and if the pixelated image is flattened, it produces the displayed black and white input vector. Shifting the black pixels by two positions to the right results in a significant number of input neurons switching from white to black and vice versa (approximately 150 neurons), leading to a vastly different image representation.
+![[Pasted image 20231013112331.png]]
+	What's even worse is that if you take an input image and randomly permute its pixels, then train it in a fully connected neural network, you would obtain similar results as if you trained it with the non-permuted original image! This implies that the image's structure or arrangement is entirely disregarded.
+
+2) There are a larger number of weights compared to the convolutional layer, making it computationally expensive and susceptible to overfitting, especially when the input size is large.
+
+Example:
+If you have an image that is 1000x1000, then after flattening it, you would get an input vector of 10^6 (11 million) parameters. If you then opt to have a hidden layer of the same size as the previous layer, you have a hidden layer comprising 10^6 parameters, and each neuron is fully connected to every preceding neuron, resulting in 10^6 x 10^6 parameters in total for that hidden layer. This quantity of parameters is extensive to store in conventional computers and represents just one layer, posing a scalability issue.
 	![[Pasted image 20231013113239.png]]
 
-On the opposite side, there are two main ideas for the convolutional layers:
-- first one is to make local connections instead of global connections: each hidden layer of the NN is not connected to all of the neurons of the next one, but just to some of them. This is called sparse connectivity (vs full connectivity), and the the weights connected to a local patch of the neurons are called filter or kernel. Another way of saying that, is that the convolutional layers are sensitive to a small sub-region of the input space, called receptive field (analogy with biology).
+On the contrary, there are two main concepts for the **convolutional layers**:
+
+- The first idea involves creating local connections instead of global connections: each hidden layer of the neural network is not connected to all the neurons in the next layer but only to some of them. This is referred to as sparse connectivity (versus full connectivity), and the weights associated with a local patch of neurons are termed filters or kernels. Another way to express this is that convolutional layers are responsive to a small sub-region of the input space, referred to as a receptive field (analogous to biology).
+
 Example:
-	If you have an image that is 1000x1000 then after flattening it you would get an input vector of 10^6 (11 million) parameters. If then you choose again to have an hidden layer of the same size of the previous layer, then you have a hidden layer of 10^6. If the hidden layer is a convolutional layer, we decide to connect a small number of neurons in the input layer to each neuron of the hidden layer. Since we have an image as input, we arbitrarly decide to connect small patches of the image that are big 10x10. This means that each hidden neuron will be connected to 10^2 input-neurons. Therefore, the total number of parameters f the first hidden layer is 10^6x10^2=10^8, that is way less then the results we got previously with the fully connected nn. 
+If you have an image that is 1000x1000, flattening it results in an input vector of 10^6 (11 million) parameters. If you then choose to have a hidden layer of the same size as the previous layer, resulting in a hidden layer of 10^6 parameters. If this hidden layer is a convolutional layer, we decide to connect a small number of neurons in the input layer to each neuron of the hidden layer. Given that the input is an image, we arbitrarily opt to connect small patches of the image that are 10x10 in size. This implies that each hidden neuron will be linked to 10^2 input neurons. Hence, the total number of parameters for the first hidden layer is 10^6 x 10^2 = 10^8, which is significantly fewer than the results obtained previously with the fully connected neural network.
 ![[Pasted image 20231013113620.png]]
-- second, you have shared weights. It means that you use the same set of weights (also known as a kernel or filter) across multiple spatial locations in an input feature map. This means that instead of having a separate set of weights for each location in the input, a single set of weights is applied across the entire input. This is crucial in order to achieve the stability that we cannot afford in the fully connected layers, such as equivariant to translation: if you shift your original image and apply convolution, you would get the same results of the original image but with the shifting. This means that objects or patterns can appear at different positions in an image, but their identity remains the same. By sharing weights, CNNs can recognize the same feature regardless of its position in the input (you have string spatial information). On the other hand, contrary of what said for the FC, if you permute the input, you would get a totally different output of the convolutional layer respect to the output with the non-permuted input.
+- Secondly, there's the concept of shared weights, signifying the utilization of the same set of weights (also termed a kernel or filter) across multiple spatial locations in an input feature map. Instead of having distinct weight sets for each location in the input, a single set of weights is employed across the entire input. This is vital to achieve stability, which is unattainable in fully connected layers, providing equivariance to translation. When you shift the original image and apply convolution, you obtain the same results as the original image but with the applied shifting. This implies that objects or patterns might appear at different positions in an image, yet their identity remains consistent. Through weight sharing, Convolutional Neural Networks (CNNs) can recognize the same feature irrespective of its position in the input, preserving strong spatial information. Conversely, in contrast to what was mentioned for the fully connected layers, if you permute the input, the output of the convolutional layer will significantly differ from the output generated by the non-permuted input.
 
-Why are this type of layers called convolutional layers?
-If you satisfy these two constraints, it is equivalent to compute the output layer as a convolution of the input layer (see slide 16).
+When training your model, your objective is to learn the kernels. Therefore, in CNNs, the weights represent the kernels.
 
-When you train your model, your goal is to learn the kernels. So in CNN the weights are the kernels. 
+Applying one convolution with a specific kernel to an image (or feature map) results in one image (or feature map) as the output. Typically, multiple kernels are applied to output several feature maps, providing a more comprehensive description and increasing the number of parameters. If n convolutions are applied between an input layer and a subsequent hidden layer, n outputs are obtained (refer to image slides 18-19). Using multiple filters doesn't significantly increase the number of weights (due to weight sharing constraints), but it does amplify the number of neurons, potentially leading to memory issues.
 
-When you apply one convolution with 1 specific kernel to an image (or feature map), you get 1 image (or feature map) as result. Usually, we like to apply multiple kernel in order to ouput several feature map and get a richer description (= get more parameters). If between an input layer and a following hidden layer you apply n convolution, you would get n outputs (see image slides 18-19).
-Using multiple filters, you would get not many weights (for the constraint of sharing them), but you would get many neurons and this would get to memory issues. 
+When applying convolution to a given input and aiming for the output to have the same dimension, configuring the padding and stride is essential.
 
-When you apply the convolution to a certain input, you want to have the same dimension for the output you have to configure the padding and the stride. 
-
-In some tasks, expecially in classification, you want your convolutional layer not only to be equivariant to translation operations but invariant. The main difference between invariance and equivariant is that the equivariance allows the network to generalise edge, texture, shape detection in different locations, while the invariance allows precise location of the detected features to matter less. To get more local invariance we can add some pooling operations in the network. See question 3 for more details.
-
+In some tasks, especially in classification, it's desirable for the convolutional layer not only to be equivariant to translation operations but also invariant. The primary distinction between invariance and equivariance lies in the fact that equivariance allows the network to generalize edge, texture, and shape detection in different locations, while invariance allows the precise location of the detected features to matter less. To achieve more local invariance, pooling operations can be added to the network. Refer to question 3 for more details.
 
 ### 3.  Why do we use spatial pooling ?
 
-In some tasks, expecially in classification, you want your convolutional layer not only to be equivariant to translation operations but invariant. The main difference between invariance and equivariant is that the equivariance allows the network to generalise edge, texture, shape detection in different locations, while the invariance allows precise location of the detected features to matter less. To get more local invariance we can add some pooling operations in the network. The pooling aggregates the value that wehave in the input feature map to sum up the info that we have in local regions. There are several way to pool the value (max, average, ..). In the image below is shown that after you translate your input image, if you apply convolution you get a shifted result (since convolutional layers are equivariant), and to fix that shifts you can apply a pooling operation that will give you the same result as if you computed the same pipeline with a non shifted input image.
+In certain tasks, especially in classification, one desires the convolutional layer not only to be equivariant to translation operations but also invariant. The primary distinction between invariance and equivariance is that equivariance allows the network to generalize edge, texture, and shape detection in different locations, while invariance enables the precise location of detected features to matter less. To achieve more local invariance in the results, pooling operations can be added to the network. Pooling aggregates the values in the input feature map to summarize information within local regions. There are several ways to pool the values (max, average, etc.). After translating your input image, applying convolution results in a shifted output (as convolutional layers are equivariant). To correct these shifts, a pooling operation can be employed to yield the same outcome as if the same pipeline were computed with a non-shifted input image.
 
-Getting into the details of the pooling operations, you apply the pooling to each channel of the input. You can tweak several parameteers of the poolin, such as stride or padding. Usually after pooling we don't want to get an output image that has the same size of the input image, so we choose a stride that is >1, and so we downscale the image. 
+Another significant use of spatial pooling is to consistently reduce the size of the feature map across the network layers, generating a representation of salient features.
+
+When delving into the details of pooling operations, pooling is applied to each channel of the input. Various parameters of the pooling operation can be adjusted, such as stride or padding. Typically, after pooling, the objective is not to attain an output image of the same size as the input image, so a stride greater than 1 is chosen, downsizing the image.
 
 ### 4. Suppose we try to compute the output of a classical convolutional network (for example the one in Figure 2) for an input image larger than the initially planned size (224 × 224 in the example). Can we (without modifying the image) use all or part of the layers of the network on this image ?
 
-No, you cannot use **all** of the part of the layers. Given the VGG16 network as example, if you give it an input image that is larger than 224x224 (let's say you give an image 400x400), every convolutional layer and max pooling (for example the output of the first convolutional layer would be 400x400x64) but then it won't fit in the fully connected layer. This is because when you design your model you have to fix the size of the  input and output of the fully connected layer :
+No, you cannot use **all** parts of the layers. Taking the VGG16 network as an example, if you provide it with an input image larger than 224x224 (for instance, a 400x400 image), every convolutional layer and max pooling operation will yield larger outputs (for example, the output of the first convolutional layer would be 400x400x64). However, these outputs won't fit into the fully connected layer. This limitation occurs because when designing your model, you need to specify and fix the size of the input and output for the fully connected layer.
 ```python
 nn.Linear(input_size, output_size)
 ```
@@ -82,59 +81,76 @@ Another method would be do a convolution with 1x1 kernels.
 ### 6. Suppose that we therefore replace fully-connected by their equivalent in convolutions, answer again the question 4. If we can calculate the output, what is its shape and interest ?
 
 ![[Pasted image 20231013150005.png]]
-We want to replace the FC layers with the equivalent convolutional layer. 
-The FC6 layer with c=4096 that is looking at some input volume of size 7×7×512 can be equivalently expressed as a CONV layer with k=7,P=0,S=1,c=4096, where k is the kernel size, p is the padding, s is the stride and c is the number of filters. In other words, we are setting the filter size to be exactly the size of the input volume, and hence the output will simply be 1×1×4096 since only a single depth column “fits” across the input volume, giving identical result as the initial FC layer.
-IMAGE
-Then the fc7 layer with again c=4096 will have input volume of size 1×1×4096. The equivalent convolutional layer would have k=1, p=0, s=1, c=4096.
-IMAGE
-Then the fc7 layer with again c=1000 (that is the number of classes of imagenet) will have input volume of size 1×1×4096. The equivalent convolutional layer would have k=1, p=0, s=1, c=1000.
-IMAGE
+We aim to replace the FC layers with their equivalent convolutional layers. 
 
-Overall, this would be our new architecture:
-IMAGE
+The FC6 layer with \(c=4096\) observing an input volume of size \(7×7×512\) can be expressed equivalently as a CONV layer with \(k=7\), \(P=0\), \(S=1\), \(c=4096\), where \(k\) represents the kernel size, \(P\) denotes the padding, \(S\) signifies the stride, and \(c\) indicates the number of filters. Essentially, we're setting the filter size to match the exact size of the input volume, resulting in an output of \(1×1×4096\) since only a single depth column "fits" across the input volume, yielding the same outcome as the original FC layer.
 
-If all the layers are convolutions, the neural network can be applied to images of any size. The size of the network's output depends on the size of the input images it is applied to. However, if the network is applied to smaller images, the output will be empty because the images are not large enough to apply the learned filter. If the images are larger, the output of the network will no longer be a single number but a 2D array. ( #TODO : revision )
+Subsequently, the fc7 layer, also with \(c=4096\), will possess an input volume size of \(1×1×4096\). Its equivalent convolutional layer would have \(k=1\), \(P=0\), \(S=1\), \(c=4096\).
+
+Following this, the fc7 layer with \(c=1000\) (representing the number of classes in ImageNet) will feature an input volume size of \(1×1×4096\). The equivalent convolutional layer would have \(k=1\), \(P=0\), \(S=1\), \(c=1000\).
+
+When all the layers are convolutional, the neural network can be applied to images of any size. The output size of the network is dependent on the size of the input images used. However, if the network is applied to smaller images, the output will be empty because the images are insufficiently large to apply the learned filter. Conversely, for larger images, the network's output will not be a single number but a 2D array.
 
 [source](https://cs231n.github.io/convolutional-networks/#convert)
 ### 7. We call the receptive field of a neuron the set of pixels of the image on which the output of this neuron depends. What are the sizes of the receptive fields of the neurons of the first and second convolutional layers ? Can you imagine what happens to the deeper layers ? How to interpret it ?
 
-![[Pasted image 20231013153617.png]]
-[reference](https://cs231n.github.io/convolutional-networks/#conv)
 - As you move deeper into the network, the receptive field size continues to increase. This is primarily due to the stacking of convolutional layers and pooling layers with larger windows or strides.
 - Deeper layers have progressively larger receptive fields, allowing them to capture more global information and high-level features in the input image.
 - This increase in receptive field size is a fundamental aspect of hierarchical feature learning in deep CNNs. Features learned in deeper layers tend to represent more complex and abstract patterns.
 
-On the output of the first convolutional layer, the size of the pixel's receptive field is equal to the size of the convolution filter. By applying a second convolution immediately, the size of the pixel's receptive field becomes (k2-1) * s1 + k1.
+On the output of the first convolutional layer, the size of the pixel's receptive field is equal to the size of the convolution filter. By applying a second convolution immediately, the size of the pixel's receptive field becomes $(k2-1) s1 + k1$.
 
 The size of the receptive field increases with depth, which means that the early layers have low-level features, and the later layers have higher-level features.
+![[Pasted image 20231030143800.png]]
+[reference](https://cs231n.github.io/convolutional-networks/#conv)
 
 ### 8. For convolutions, we want to keep the same spatial dimensions at the output as at the input. What padding and stride values are needed ?
-p=2, s=1
+Considering the equation of the first answer: 
+    $x' = [\frac{(x + 2p - k)}{s}] + 1$
+if we assume the condition  $x=x'$ :
+$$x = [\frac{(x + 2p - k)}{s}] + 1 $$
+to obtain $x=x$, we need to have $s=1$, because it is in the denominator.
+Therefore:
+$$ x=x+2p-k+1$$
+$$ 0=2p-k+1$$
+$$ p=\frac{k-1}{2}$$
+If we assume that k=5, we obtain the solution $p=2, s=1$
 
 Notice that, to maintain the size of the images when applying a convolution, a stride of 1 is used, along with padding based on the size of the kernel 'k':
-
-- For an odd 'k', a padding of size (k - 1) / 2 is appropriate.
-- For an even 'k,' you should also use a padding of size (k - 1) / 2, but this results in a non-integer padding size. That's why, in practice, odd-sized kernels are used.
+- For an odd 'k', a padding of size $\frac{k-1}{2}$ is appropriate.
+- For an even 'k,' you should also use a padding of size $\frac{k-1}{2}$ , but this results in a non-integer padding size. That's why, in practice, odd-sized kernels are used.
 
 ### 9. For max poolings, we want to reduce the spatial dimensions by a factor of 2. What padding and stride values are needed ?
-p=0, s=2
+Considering the equation of the relation between the input size and the output size after a maxpooling operation: 
+    $x' = [\frac{(x + 2p - k)}{s}] + 1$
+if we assume the condition  $x'=\frac{x}{2}$ :
+$$\frac{x}{2} = [\frac{(x + 2p - k)}{s}] + 1 $$
+$$x= 2[\frac{(x + 2p - k)}{s}] + 2$$
+to remove the multiplied factor of 2 we need to have $s=2$.
+Therefore:
+$$ x=x+2p-k+2$$
+$$ 0=2p-k+2$$
+$$ p=\frac{k-2}{2}$$
+If we assume that k=2, we obtain the solution $p=0, s=2$
+
 
 ### 10.  For each layer, indicate the output size and the number of weights to learn. Comment on this repartition.
 You can see it in the code, or otherwise here:
-10)
-Layer | Size of the output | Number of weights
-entrée 32*32*3 0
-conv1 32*32*32 5*5*3*32 = 2400
-pool1 16*16*32 0
-conv2 16*16*64 5*5*32*64 = 51200 
-pool2 8*8*64 0
-conv3 8*8*64 5*5*64*64 = 102400
-pool3 4*4*64 0
-fc4 1000 4*4*64*1000 = 1024000
-fc5 10 1000*10 = 10000
-Total number of parameters: 1 190 000
 
-( #TODO : revision)
+
+|Layer | Size of the output | Number of weights|
+| -------- |------------|-----------|
+|Input |32x32x3 |0|
+|conv1 |32x32x32 |5x5x3x32 + 32 = 2432|
+|pool1 |16x16x32 |0|
+|conv2 |16x16x64 |5x5x32x64 +64 = 51264| 
+|pool2 |8x8x64 |0|
+|conv3 |8x8x64 |5x5x64x64 + 64= 102464|
+|pool3 |4x4x64| 0|
+|fc4 |1000 |4x4x64x1000 +1000 = 1025000|
+|fc5 |10| 1000*10 +10 = 10010|
+
+ Total number of parameters = 1 191 170
 
 ### 11. What is the total number of weights to learn ? Compare that to the number of examples.
 To calculate the total number of weights to learn in a neural network, you need to sum up the weights in all the layers of the network.
@@ -180,10 +196,10 @@ Method by hand:
     - Number of Weights = `(1000 * 10) + 10 = 10010`
 
 Now, let's sum up the number of weights from each layer:
-- Convolutional Layers: `2432 + 51264 + 102464 = 154160` weights
+- Convolutional Layers: `2432 + 51264 + 102464 = 156160` weights
 - Fully Connected Layers: `1025000 + 10010 = 1035010` weights
 
-Total Number of Weights in the `ConvNet2` model: `154160 + 1035010 = 1199170` weights.
+Total Number of Weights in the `ConvNet2` model: `156160 + 1035010 = 1191170` weights.
 
 Method coded:
 look at count_parameters() function in project1cd2.py:
@@ -195,20 +211,16 @@ def count_parameters(self):
 	return total_params
 ```
 
-Comparing the number of the weights to be learned (1190000) with the number of the images in the training dataset (50000), we think that the number of images is too small to learn such number of weights and this could lead to underfitting or overfitting.
+Comparing the number of the weights to be learned (1191170) with the number of the images in the training dataset (50000), we think that the number of images is too small to learn such number of weights and this could lead to underfitting or overfitting.
 ### 12. Compare the number of parameters to learn with that of the BoW and SVM approach.
-Certainly, here's a more detailed and extended version:
-
 In the previously employed Bag of Words (BoW) approach coupled with Support Vector Machine (SVM) classification, utilizing a dictionary comprising 1000 Scale-Invariant Feature Transform (SIFT) descriptors, the total number of parameters to be learned was approximately 128,000. This method involved a series of hyperparameters that needed to be carefully configured, including the size of the learned dictionary, the tuning of the 'C' constant in the SVM classifier, and the specific type of SIFT descriptors used.
 
 In contrast, when employing a convolutional neural network (CNN), we encounter a substantially higher number of parameters to train. To be precise, the CNN demands learning tenfold more weights compared to the BoW+SVM approach. Additionally, the neural architecture introduces a set of hyperparameters to consider, but it offers a unique advantage. The CNN operates on an end-to-end learning paradigm, which enables it to automatically acquire and adapt the feature extraction process.
 
 This means that, with a CNN, the model learns not only how to classify images but also how to extract and represent the most relevant features from the data, whereas the BoW+SVM approach relies on predefined features and requires fine-tuning of its parameters to achieve optimal performance. The increase in parameter count in the CNN is a trade-off for this added capacity to learn a broader range of features directly from the data.
 
-( #TODO : revision)
-
 ### 13. Read and test the code provided. You can start the training with this command : main (batch_size, lr, epochs, cuda = True)
-...
+In the code
 ### 14.  In the provided code, what is the major difference between the way to calculate loss and accuracy in train and in test (other than the the difference in data) ?
 They both use AverageMeter().
 ```python
@@ -250,12 +262,13 @@ def train(self, mode=True):
 		module.train(mode)
 	return self
 ```
-As is shown in the above codes, the model.train() sets the modules in the network in training mode. It tells our model that we are currently in the training phase so the model keeps some layers, like dropout, batch-normalization which behaves differently depends on the current phase, active. Whereas the model.eval() does the opposite. For instance, in training mode, BatchNorm updates a moving average on each new batch; whereas, for evaluation mode, these updates are frozen. Therefore, once the model.eval() has been called then, our model deactivate such layers so that the model outputs its inference as is expected.
+Here is a revised version with corrected grammar:
 
-Additionally, the error displayed during training is an average computed over different batches of data. This means it doesn't represent the final error at the end of an epoch, which is the case during testing. ( #TODO : revision)
+As demonstrated in the code above, the `model.train()` function sets the modules in the network to the training mode. It informs our model that we are presently in the training phase, allowing certain layers such as dropout and batch normalization, which behave differently based on the current phase, to be activated. Conversely, `model.eval()` performs the opposite function. During the training mode, BatchNorm updates a moving average with each new batch, whereas, during the evaluation mode, these updates are suspended. Therefore, upon calling `model.eval()`, these layers are deactivated, ensuring that the model produces its inference as expected.
 
+Moreover, the error displayed during training is an average computed over various batches of data. This implies that it does not represent the final error at the end of an epoch, which is the case during testing.
 ### 15. Modify the code to use the CIFAR-10 dataset and implement the architecture requested above. (the class is datasets.CIFAR10 ). Be careful to make enough epochs so that the model has finished converging.
-...
+In the code
 
 ### 16.  What are the effects of the learning rate and of the batch-size ?
 Convergence depends on the choice of η (eta, the learning rate): if it's too small, the model will take a long time to train, and if it's too large, the model may fail to converge. In practice, it's common to decrease η as training progresses.
@@ -310,21 +323,19 @@ From the text output, we can see that there is still a loss and accuracy that is
 ### 18. Interpret the results. What’s wrong ? What is this phenomenon ?
 Experiment: batch_size=128, lr=0.1, epochs=50, cuda=True
 ![[Pasted image 20231027132228.png]]
-These plots show the accuracy percentage over the number of epochs (on the left) and the loss number over the number of epochs (on the right). Our goal is to minimize the loss as much as possible and to maximize the accuracy as much as possible. The different metrics are calculated on the train set (in blue) and on the test set (in orange). It's worth notice that the "test set" is not intended to be the set of images from the dataset used to make the _predictions_ after the training, but it is instead used for evaluating our training, therefore it is calculated during the training itself. More precisely, we use "test set", meaning "val test".
 
-As we can see, the accuracy train and is increasing, while the loss train is decreasing and for us it's good. Instead, the loss test has a "U" shape, meaning that at a certain point it stops decreases and starts increase. This is a fenomenon called overfitting, where the model is becoming too specialized to the training data and performs poorly on unseen data. Also, the test accuracy tends to flatten at 70% instead of trying to achieve a better result. Thus, we should change our hyperparameters or the architecture of the model or improve the dataset or use other metrics in order to fix this issue.
+These plots display the accuracy percentage over the number of epochs (on the left) and the loss number over the number of epochs (on the right). Our objective is to minimize the loss as much as possible and maximize the accuracy as much as possible. The different metrics are calculated on the train set (in blue) and on the test set (in orange). It's worth noting that the "test set" is not intended to be the set of images from the dataset used to make predictions after the training. Instead, it is used to evaluate our training and is calculated during the training itself. More precisely, we refer to it as the "val test".
 
-This shows how the evaluation set (here called test set) is truly important: if we were evaluating ur model on the train set only, we would have thinked that the model performed well, but that it is not correct. 
+As observed, the accuracy of the train set is increasing, while the loss of the train set is decreasing, which is favorable for us. However, the loss of the test set forms a "U" shape, indicating that at a certain point, it stops decreasing and starts to increase. This phenomenon is known as overfitting, where the model becomes overly specialized to the training data and performs poorly on unseen data. Furthermore, the test accuracy tends to plateau at 70% instead of striving to achieve a better result. Therefore, we should consider modifying our hyperparameters or the architecture of the model, improving the dataset, or using other metrics to address this issue.
+
+This underscores the importance of the evaluation set (referred to here as the test set): if we were to evaluate our model only on the train set, we might mistakenly believe that the model performed well, which is not the case.
 
 ---
 # 3.1 Standardization of examples
 ### 19. Describe your experimental results.
 Experiment: batch_size=128, lr=0.1, epochs=50, cuda=True
 ![[Pasted image 20231027134641.png]]
-The train imrpoved a little bit than before, because the accuracy test is a little bit higher than 70% and the minimum of the loss test is lower than the 1.0 of before. But still, we see a fenomenon of overfitting and the test and trains curves are different from each others.
-
-( #TODO: revision)
-
+The training has shown some improvement compared to before. The test accuracy is slightly higher, exceeding 70%, and the minimum test loss is lower than the previous 1.0. However, we still observe an overfitting phenomenon, and the curves for the test and train sets exhibit noticeable differences.
 ### 20. Why only calculate the average image on the training examples and normalize the validation examples with the same image ?
 Preprocessing should not be learned on the test dataset, as it would bias the obtained performance results.
 
@@ -344,15 +355,17 @@ From the last train, we can see a huge improvement on the accuracy and on the lo
 ### 23. Does this horizontal symmetry approach seems usable on all types of images ? In what cases can it be or not be ?
 The random horizontal symmetry takes an image as a input and flips it horizontally (usually in the code, with probability p). As en example:
 ![[Pasted image 20231027141209.png]]
-Some images, such as the car shown above, keeps the same semantic even after the horizontal flip. Since the other classes are animal or vehicles, the semantic stys the same. What could be a downside, is that if we have and image that is perfectly horizzontally symmetrical, after the transformation we get the same input image, but that is a really an unfortunate case. Instead, if you have a dataset containing letters or numbers, certain type of them could change drastically their semantics after the flipping. For example in this set of the MNIST dataset:
+Some images, like the car shown above, retain the same semantic meaning even after a horizontal flip. This consistency in semantics holds true because the other classes consist of animals or vehicles. However, a potential downside arises when dealing with images that are perfectly horizontally symmetrical: after transformation, they result in the same input image, which is indeed an unfortunate case. On the other hand, in a dataset containing letters or numbers, certain types of characters may drastically alter their semantics after flipping. For instance, consider this subset from the MNIST dataset:
 ![[Pasted image 20231027142024.png]]
 The zeros and the ones (where the one is written with only a straight line) won't change their semantics, while the other numbers (5,4,9,2,3) would be unrecognizable.
 
 ### 24. What limits do you see in this type of data increase by transformation of the dataset ?
-As descripted above, it is important that the semantics of the image stays the same, otherwise the network would learn some parameters that should not to. In other words, it is necessary that after a transformation the new image is useful for the training, to learn something for the ultimate goal.  ( #TODO : revision)
+As described above, it is important that the semantics of the image remain unchanged; otherwise, the network would learn parameters it shouldn't. In other words, it is essential that after a transformation, the new image remains useful for training, enabling the learning process towards the ultimate goal.
 
 ### 25. Bonus : Other data augmentation methods are possible. Find out which ones and test some.
-#TODO 
+Other possible transformations are adding noise to the image, performing rotations with a certain angle, making changes in brightness, saturation, using ColorJitter function for example, or partially remove a part of the image (cut out). Here we performed a test adding RandomRotation with an alpha degree of 66° and a ColorJitter, that randomly jitters the brightness in the range [0.1,0.6], jitters contrast by a factor of 1 and jitters hue by a factor of 0.4.
+Experiment: batch_size=128, lr=0.1, epochs=50, cuda=True
+![[Pasted image 20231029162452.png]]
 
 --- 
 # 3.3 Variants on the optimization algorithm
@@ -360,9 +373,13 @@ As descripted above, it is important that the semantics of the image stays the s
 ### 26. Describe your experimental results and compare them to previous results, including learning stability.
 Experiment: batch_size=128, lr=0.1, epochs=50, cuda=True
 ![[Pasted image 20231027181232.png]]
-The accuracy test has increased and the loss test has decreased a little bit more, but still the two curves differs a lot. We can also see that the loss test has been stabilized better. Remember that we chose a high number of epochs because we would like to express the training results in the most thruthful way as possible, but with an early stopping technique, one could simply decide to keep the weight that has the lowest loss or the highest accuracy.
+The test accuracy has increased, and the test loss has decreased slightly, but still, the two curves differ significantly. Additionally, it's noticeable that the test loss has stabilized further. It's important to recall that we selected a high number of epochs to accurately represent the training results. However, by using an early stopping technique, one could opt to retain the weights that correspond to the lowest loss or the highest accuracy.
 
 ### 27. Why does this method improve learning ?
+The optimization process of the loss function is mathematically uncertain and cannot be solved in an analytical form. This is why we rely on numerical methods or optimization schemes that consider the local gradient concerning the loss. The figure illustrates a loss landscape given our input data (where the loss function is expressed as: $L(theta_i|{x_i}))$. There is no guarantee that we can locate the global minimum due to the loss function not necessarily being a log-convex or a convex function.
+![[Pasted image 20231028155341.png]]
+The optimization schemes depend on several hyperparameters, including the learning rate, momentum, or Nesterov's acceleration.
+
 As it is written here: https://neptune.ai/blog/how-to-choose-a-learning-rate-scheduler
 A Learning rate schedule is a predefined framework that adjusts the learning rate between epochs or iterations as the training progresses. Two of the most common techniques for learning rate schedule are,
 - Constant learning rate: as the name suggests, we initialize a learning rate and don’t change it during training; 
@@ -373,7 +390,29 @@ It is achieved by adding the gradient calculated in the previous step, weighted 
 With the learning rate scheduler we can move quickly in the beginning to approach a suitable solution rapidly. Once the model has converged, reducing the learning rate allows for fine-tuned improvements.
 
 ### 28. Bonus : Many other variants of SGD exist and many learning rate planning strategies exist. Which ones ? Test some of them.
+
+Other possible variants of the SDG are:
+- Batch gradient descent
+- Mini-Batch Gradient Descent
+- Momentum Gradient Descent
+- Nesterov Accelerated gradient
+- AdaGrad
+- RMSProp
+- Adam
+- ...
+Here is an experiment with Adam:
+Experiment: batch_size=128, lr=0.1, epochs=50, cuda=True
 #TODO
+
+efficient for large datasets and noisy data. Can converge to suboptimal solutions, requires tuning of hyperparameters.
+
+Here is an experiment with SGD with momentum (Momentum Gradient Descent):
+Experiment: batch_size=128, lr=0.1, epochs=50, cuda=True
+#TODO 
+
+Fast convergence, less likely to get stuck in local minima. May overshoot and oscillate around the optimum.
+
+
 
 ---
 # 3.4 Regularization of the network by dropout
@@ -381,8 +420,7 @@ With the learning rate scheduler we can move quickly in the beginning to approac
 ### 29. Describe your experimental results and compare them to previous results.
 Experiment: batch_size=128, lr=0.1, epochs=50, cuda=True
 ![[Pasted image 20231027183751.png]]
-After the modifications, we can see good improvements both in the accuracy and in the loss test functions. Expecially, we can see that the Dropout that we added lead to decrease significantly the overfitting fenomenon. 
-Since a network with dropout requires more epochs to train, but for the same architecture, the epochs are computed faster because there are fewer parameters to update, we decided to increase the number of epochs:
+After the modifications, we observed significant improvements in both the accuracy and the loss test functions. Particularly, the addition of Dropout led to a notable decrease in the overfitting phenomenon. As a network with dropout requires more epochs to train, although the epochs are computed faster for the same architecture due to fewer parameters to update, we decided to increase the number of epochs.
 Experiment: batch_size=128, lr=0.1, epochs=100, cuda=True
 ![[Pasted image 20231027210731.png]]
 We can see that even with a number of epochs of 100 we don't have overfitting problems.
@@ -392,7 +430,8 @@ In general, regularization is a process that penalizes the complexity of a model
 Regularization comes in various forms, such as L1 (Lasso) and L2 (Ridge) regularization, dropout, weight decay, and early stopping, among others. Each of these techniques applies a different form of constraint on the model's parameters, effectively curbing its complexity and promoting better generalization.
 
 ### 31. Research and "discuss" possible interpretations of the effect of dropout on the behavior of a network using it
-Dropout is a technique that involves "disabling" specific units in our neural network, thereby encouraging the learning of other units. During training, the gradient tends to increasingly favor certain pathways in the network, giving them more importance. By deactivating some units, the gradient is compelled to redistribute its learning across other parts of the network.
+Dropout is a technique that involves 'disabling' specific units in our neural network, thereby encouraging the learning of other units. During training, the gradient tends to increasingly favor certain pathways in the network, granting them more importance. By deactivating some units, the gradient is compelled to redistribute its learning across other parts of the network.
+
 However, it's important to note that when dropout is applied, the network's expressiveness is reduced. To address this, it's often beneficial to increase the size of the neural network layers. This adjustment helps mitigate the risk of the model becoming overly reliant on specific units and enhances its ability to generalize, ultimately improving the model's overall performance and robustness.
 
 ### 32. What is the influence of the hyperparameter of this layer ?
@@ -410,7 +449,6 @@ Choosing the right value for 'p' is a trade-off, and it often involves experimen
 
 ### 33. What is the difference in behavior of the dropout layer between training and test ?
 During the evaluation phase, dropout is disabled. Because you disable neurons _randomly_, your network will have different outputs every (sequences of) activation. This undermines consistency.
-#TODO : revision
 
 --- 
 # 3.5 Use of batch normalization
@@ -421,11 +459,13 @@ The test accuracy improved again and also the loss has decreased again. Thanks t
 
 We tried to use the increased number of epochs:
 Experiment: batch_size=128, lr=0.1, epochs=100, cuda=True
-
+#TODO
 
 ## Conclusions
-Al the expeeriments were run on a GPU NVIDIA A100 80GB.
+Al the experiments were run on a GPU NVIDIA A100 80GB.
 
-The initial architecture was not good: the accuracy was too low (70%) and the loss presented some overfitting effects.
-Our best model has obtained an accuracy evaluation of more than 80 % with a loss evaluation of 0.6 and without any overfitting effects. To further analise the model, there are other metrics that could be used such as precision, recall, f1, etc...
-Another possibility is to train the model in a much larger dataset, such as ImageNet and choose a more complex architecture.
+The initial architecture was inadequate: the accuracy was too low at 70%, and the loss exhibited some overfitting effects.
+
+Our best model achieved an accuracy evaluation of over 80% with a loss evaluation of 0.6, without any overfitting effects. To further analyze the model, various other metrics could be used, such as precision, recall, F1 score, etc.
+
+Another possibility is to train the model using a much larger dataset, such as ImageNet, and opt for a more complex architecture.
