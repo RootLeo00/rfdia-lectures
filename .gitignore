@@ -16,6 +16,6 @@ doc/.obsidian/*
 
 #datatsets
 */datatsets/*
-
+project1e/MNIST/raw
 project1cd/datasets/*
 project1ab/datasets/*
