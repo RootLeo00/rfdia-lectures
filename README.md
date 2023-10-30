@@ -1,7 +1,7 @@
 # TODO
 
 - revision of all answer by LUISA
-- tests (see TODO)
+- tests (see TODO) --> DONE
 - train and test transformer 
 - put bonus part in the notebook
 - final readme
