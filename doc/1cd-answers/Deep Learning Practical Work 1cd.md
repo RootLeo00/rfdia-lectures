@@ -342,8 +342,9 @@ Preprocessing should not be learned on the test dataset, as it would bias the ob
 ( #TODO :revision)
 
 ### 21. Bonus : There are other normalization schemes that can be more efficient like ZCA normalization. Try other methods, explain the differences and compare them to the one requested.
+We tried to perform ZCA normalization: to calculate the ZCA transformation matrix we use PCA by scikit-learn and saved it in an external file. After computing that, we trained the the neural network using the ZCA normalization instead of the standard normalization.
+The results that we obtained are very bad compared to the previous ones: the accuracy is very low and oscillates too much. Here we show the results of an experiment with the following hyperparameters batch_size=128, lr=0.1, epochs=50, cuda=True
 #TODO 
-
 
 ---
 # 3.2 Increase in the number of training examples by data increase
