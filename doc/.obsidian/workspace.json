@@ -4,19 +4,15 @@
     "type": "split",
     "children": [
       {
-        "id": "17cf87ec893db80d",
+        "id": "a7ce9fe344d68fb9",
         "type": "tabs",
         "children": [
           {
-            "id": "25e6a3703f239dd3",
+            "id": "52df85c3ac340965",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "1e-answers/Transformers.md",
-                "mode": "source",
-                "source": false
-              }
+              "type": "empty",
+              "state": {}
             }
           }
         ]
@@ -85,7 +81,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "1e-answers/Transformers.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +97,6 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "1e-answers/Transformers.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -124,9 +118,7 @@
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {
-                "file": "1e-answers/Transformers.md"
-              }
+              "state": {}
             }
           }
         ]
@@ -146,30 +138,31 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "25e6a3703f239dd3",
+  "active": "52df85c3ac340965",
   "lastOpenFiles": [
+    "1cd-answers/images/Pasted image 20231021171542.png",
+    "1ab-answers/images/Screenshot 2023-10-14 at 5.19.10 PM.png",
+    "1cd-answers/images",
+    "1ab-answers/images/Pasted image 20231012154658.png",
+    "1e-answers/Transformers.md",
+    "1ab-answers/images",
+    "1e-answers/images/Pasted image 20231027215433.png",
+    "1e-answers/images",
     "1cd-answers/Deep Learning Practical Work 1cd.md",
     "1cd-answers/Deep Learning Practical Work 1cd.pdf",
     "1cd-answers/rdfia_1-cd.pdf",
-    "1cd-answers/Pasted image 20231030143800.png",
+    "1cd-answers/images/Pasted image 20231030143800.png",
     "1ab-answers/Deep Learning Practical Work 1-ab.md",
-    "1cd-answers/Pasted image 20231028155341.png",
-    "1cd-answers/Pasted image 20231029205351.png",
-    "1cd-answers/Pasted image 20231029162452.png",
-    "1ab-answers/Screenshot 2023-10-14 at 5.19.04 PM.png",
-    "1ab-answers/Pasted image 20231030123940.png",
-    "1ab-answers/Pasted image 20231013150005.png",
-    "1ab-answers/Pasted image 20231030114802.png",
-    "1ab-answers/Pasted image 20231030130903.png",
-    "1ab-answers/Pasted image 20231030125102.png",
+    "1cd-answers/images/Pasted image 20231028155341.png",
+    "1cd-answers/images/Pasted image 20231029205351.png",
+    "1cd-answers/images/Pasted image 20231029162452.png",
+    "1ab-answers/images/Screenshot 2023-10-14 at 5.19.04 PM.png",
+    "1ab-answers/images/Pasted image 20231030123940.png",
+    "1ab-answers/images/Pasted image 20231013150005.png",
     "1ab-answers/Deep Learning Practical Work 1-ab.pdf",
     "1ab-answers/1ab-answer16-17_231021_142243.pdf",
-    "1e-answers/Transformers.md",
     "1ab-answers/rdfia_1-ab.pdf",
     "1ab-answers/gradient-notes.pdf",
-    "1e-answers/Transformers",
-    "1e-answers",
-    "1ab-answers/backpropagation_cheatsheet_less2.pdf",
-    "1cd-answers"
+    "1e-answers/Transformers"
   ]
 }
