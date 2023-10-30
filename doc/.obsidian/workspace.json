@@ -11,8 +11,12 @@
             "id": "642f0d6c577cc581",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {}
+              "type": "markdown",
+              "state": {
+                "file": "1e-answers/Transformers.md",
+                "mode": "source",
+                "source": false
+              }
             }
           }
         ]
@@ -81,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "1ab-answers/external-notes/gradient-notes.pdf",
+                "file": "1e-answers/Transformers.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -98,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "1ab-answers/external-notes/gradient-notes.pdf",
+                "file": "1e-answers/Transformers.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -121,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "1ab-answers/external-notes/gradient-notes.pdf"
+                "file": "1e-answers/Transformers.md"
               }
             }
           }
@@ -142,8 +146,12 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "d316f7d07bfa8df7",
+  "active": "642f0d6c577cc581",
   "lastOpenFiles": [
+    "1e-answers/Transformers.pdf",
+    "1cd-answers/Deep Learning Practical Work 1cd.md",
+    "1ab-answers/Deep Learning Practical Work 1-ab.pdf",
+    "1ab-answers/external-notes/gradient-notes.pdf",
     "1ab-answers/external-notes/1ab-answer16-17_231021_142243.pdf",
     "1ab-answers/external-notes/backpropagation_cheatsheet_less2.pdf",
     "1ab-answers/external-notes",
@@ -155,7 +163,6 @@
     "1ab-answers/images",
     "1e-answers/images/Pasted image 20231027215433.png",
     "1e-answers/images",
-    "1cd-answers/Deep Learning Practical Work 1cd.md",
     "1cd-answers/Deep Learning Practical Work 1cd.pdf",
     "1cd-answers/rdfia_1-cd.pdf",
     "1cd-answers/images/Pasted image 20231030143800.png",
@@ -164,9 +171,6 @@
     "1cd-answers/images/Pasted image 20231029205351.png",
     "1cd-answers/images/Pasted image 20231029162452.png",
     "1ab-answers/images/Screenshot 2023-10-14 at 5.19.04 PM.png",
-    "1ab-answers/images/Pasted image 20231030123940.png",
-    "1ab-answers/Deep Learning Practical Work 1-ab.pdf",
-    "1ab-answers/rdfia_1-ab.pdf",
-    "1ab-answers/external-notes/gradient-notes.pdf"
+    "1ab-answers/images/Pasted image 20231030123940.png"
   ]
 }
