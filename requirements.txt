@@ -1,0 +1,8 @@
+
+torch==2.0.0+cu116
+torchaudio==0.10.0+cu116
+torchvision==0.11.1+cu116
+numpy
+jupyterlab
+matplotlib
+scipy
