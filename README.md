@@ -8,3 +8,4 @@
 - zip everything clean
 - revise pdf for syntax or typo  
 - question 10.  For each layer, indicate the output size and the number of weights to learn. Comment on this repartition. --> do it in the code
+-  copy project1ab from notebook in this repo 
