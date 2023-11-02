@@ -6,7 +6,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 from utils import CirclesData
 
-def init_params(nx, nh, ny, std = 0.3, mean = 0):
+def init_params(nx, nh, ny):
     """
     nx, nh, ny: integers
     out params: dictionnary
@@ -17,25 +17,21 @@ def init_params(nx, nh, ny, std = 0.3, mean = 0):
     ## Your code here  ##
     #####################
     # fill values for Wh, Wy, bh, by
+    # activaye autograd on the network weights
 
-    # requires_grad = False because of manual backprob. This is the default for new tensors.
-    # all weights will be initialized according to a normal distribution of mean 0 and standard deviation 0.3.
-
-    #Initialize randomly
-    params["Wh"] = torch.randn(nx, nh) * std
-    params["Wy"] = torch.randn(nh, ny) * std
-
-    #Initialize as zero vectors
-    params["bh"] = torch.randn(nh) #* std
-    params["by"] = torch.randn(ny) #* std #
+    params["Wh"] = torch.randn(nx, nh, requires_grad=True)
+    params["Wy"] = torch.randn(nh, ny, requires_grad=True)
+    params["bh"] = torch.randn(nh, requires_grad=True)
+    params["by"] = torch.randn(ny, requires_grad=True)
 
     ####################
     ##      END        #
     ####################
-
     return params
 
+
 def linear_affine_transformation(X,W, b):
+    print("torch.mm(X, W.T)",torch.mm(X, W.T).shape, "\n", torch.mm(X, W.T))
     return torch.mm(X, W.T) + b
 
 
@@ -53,6 +49,7 @@ def activation_function_sigmoid(x):
 
 def activation_function_relu(x):
     return torch.max(torch.zeros(x.size()), x)
+
 
 
 
@@ -105,7 +102,6 @@ def forward(params, X):
     return outputs['yhat'], outputs
 
 
-
 def loss_accuracy(Yhat, Y):
     """
     Calculate the loss and accuracy of the model's predictions.
@@ -138,82 +134,25 @@ def loss_accuracy(Yhat, Y):
     return L, acc
 
 
-
-def backward(params, outputs, Y):
-    bsize = Y.shape[0]
-    grads = {}
-
+def sgd(params, eta):
     #####################
     ## Your code here  ##
     #####################
-    # fill values for Wy, Wh, by, bh
+    # update the network weights
+    # warning: use torch.no_grad()
+    # and reset to zero the gradient accumulators
+    # Update the network weights using gradient descent
 
-    # Retrieve intermediate values from the forward pass
-    X = outputs["X"]
-    htilde = outputs["htilde"]
-    h = outputs["h"]
-    ytilde = outputs["ytilde"]
-    yhat = outputs["yhat"]
-
-    dWh = torch.zeros_like(params['Wh'])
-    dbh = torch.zeros_like(params['bh'])
-    dWy = torch.zeros_like(params['Wy'])
-    dby = torch.zeros_like(params['by'])
-
-    # Compute the gradient of the loss with respect to yhat (cross-entropy loss derivative)
-
-    dyhat = yhat - Y
-
-    # Compute the gradients for the output layer
-    dWy += torch.matmul(h.t(), dyhat)  # dWy = h^T * dyhat
-    dby += torch.sum(dyhat, dim=0)     # dby = sum(dyhat)
-
-    # Compute the gradient for Wh and bh
-    dh = torch.matmul(dyhat, params["Wy"].t())
-    dhtilde = dh * (htilde > 0).float()  # Gradient for ReLU activation
-
-    # Backpropagate the gradients to the hidden layer
-    dh = torch.matmul(dyhat, params['Wy'].t())  # dh = dyhat * Wy^T
-    dh *= (1 - h * h)  # Gradient of tanh activation function
-
-    # Compute the gradients for the hidden layer
-    dWh += torch.matmul(X.t(), dh)  # dWh = X^T * dh
-    dbh += torch.sum(dh, dim=0)      # dbh = sum(dh)
-
-    # Store the gradients in a dictionary
-    grads = {
-        'Wh': dWh,
-        'bh': dbh,
-        'Wy': dWy,
-        'by': dby
-    }
-
-    ####################
-    ##      END        #
-    ####################
-    return grads
-
-
-
-
-def sgd(params, grads, eta):
-
-    #####################
-    ## Your code here  ##
-    #####################
-    # update the params values
-
-    # batch version of sgd
-
-    params["Wh"] -= eta * grads["Wh"]
-    params["Wy"] -= eta * grads["Wy"]
-    params["bh"] -= eta * grads["bh"]
-    params["by"] -= eta * grads["by"]
+    with torch.no_grad():
+        for param in params.values():
+            param -= eta * param.grad
+            param.grad.zero_()
 
     ####################
     ##      END        #
     ####################
     return params
+
 
 
 
@@ -224,64 +163,77 @@ def main():
     N = data.Xtrain.shape[0]
     Nbatch = 16
     nx = data.Xtrain.shape[1]
-    print('nx = ', nx)
     nh = 10
     ny = data.Ytrain.shape[1]
-    print('ny = ', ny)
-    eta = 0.02
+    eta = 0.03
 
     params = init_params(nx, nh, ny)
-    print(params)
+
     curves = [[],[], [], []]
 
-    iterations = 100
     # epoch
-    for iteration in tqdm(range(iterations)):
+    for iteration in range(100):
 
         # permute
         perm = np.random.permutation(N)
         Xtrain = data.Xtrain[perm, :]
         Ytrain = data.Ytrain[perm, :]
 
-        print(Ytrain.shape)
-
         #####################
         ## Your code here  ##
         #####################
-        # batches
+
+        # Initialize accumulators for training loss and accuracy
+        train_loss = 0.0
+        train_accuracy = 0.0
 
         for j in range(N // Nbatch):
 
             indsBatch = range(j * Nbatch, (j+1) * Nbatch)
-
-            X = torch.tensor(Xtrain[indsBatch, :], dtype=torch.float32)
-            Y = torch.tensor(Ytrain[indsBatch, :], dtype=torch.float32)
+            X = torch.tensor(Xtrain[indsBatch, :])  # Convert to PyTorch tensor
+            Y = torch.tensor(Ytrain[indsBatch, :])  # Convert to PyTorch tensor
 
             # Forward pass
             Yhat, cache = forward(params, X)
 
-            # Compute loss and accuracy
+            # Calculate the loss and accuracy
             loss, accuracy = loss_accuracy(Yhat, Y)
 
-            # Backward pass
-            grads = backward(params, cache, Y)
+            loss.backward()
 
-            # Update parameters using SGD
-            params = sgd(params, grads, eta)
+            # Update the network weights using SGD
+            params = sgd(params, eta)
+
+            # Accumulate training loss and accuracy
+            train_loss += loss.item()
+            train_accuracy += accuracy
+
+            # Reset gradients to zero
+            for param in params.values():
+                param.grad.zero_()
+
+        # Calculate average training loss and accuracy
+        train_loss /= (N // Nbatch)
+        train_accuracy /= (N // Nbatch)
+
 
         ####################
         ##      END        #
         ####################
 
+        # Evaluate on the test set
         Yhat_train, _ = forward(params, data.Xtrain)
         Yhat_test, _ = forward(params, data.Xtest)
         Ltrain, acctrain = loss_accuracy(Yhat_train, data.Ytrain)
+        Ltrain = Ltrain.item()
         Ltest, acctest = loss_accuracy(Yhat_test, data.Ytest)
+        Ltest = Ltest.item()
         Ygrid, _ = forward(params, data.Xgrid)
 
         title = 'Iter {}: Acc train {:.1f}% ({:.2f}), acc test {:.1f}% ({:.2f})'.format(iteration, acctrain, Ltrain, acctest, Ltest)
         print(title)
-        data.plot_data_with_grid(Ygrid, title)
+        # detach() is used to remove the predictions from the computational graph in autograd
+        data.plot_data_with_grid(Ygrid.detach(), title)
 
         curves[0].append(acctrain)
         curves[1].append(acctest)
@@ -289,12 +241,13 @@ def main():
         curves[3].append(Ltest)
 
     fig = plt.figure()
+
     plt.plot(curves[0], label="acc. train")
     plt.plot(curves[1], label="acc. test")
     plt.plot(curves[2], label="loss train")
     plt.plot(curves[3], label="loss test")
-    plt.grid(True)
     plt.legend()
     plt.show()
+
 
 main()
