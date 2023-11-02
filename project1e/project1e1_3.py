@@ -21,8 +21,8 @@ def get_dataset():
     transforms.ToTensor()
   ])
 
-  train_dataset = torchvision.datasets.ImageNet('.', train=True, download=True, transform=transform)
-  test_dataset = torchvision.datasets.ImageNet('.', train=False, download=True, transform=transform)
+  train_dataset = torchvision.datasets.MNIST('.', train=True, download=True, transform=transform)
+  test_dataset = torchvision.datasets.MNIST('.', train=False, download=True, transform=transform)
 
 
   train_loader = DataLoader(train_dataset, batch_size=128, shuffle=True)
