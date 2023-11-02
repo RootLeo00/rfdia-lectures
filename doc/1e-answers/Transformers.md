@@ -130,15 +130,17 @@ $$
 
 Try to use bigger transformer, for example the ViT-S from the timm library. Test with and without intialization from imagenet.
 
+
 a) Load the model using the timm library without pretrained wewights. Try to apply it directly on a tensor with the same MNIST images resolution. What it is the problem and why we have it? Explain if we have also such problem with CNNs. As ViT takes RGB images, the input tensor should have 3 channels.
 $\to$ Input shape is fixed for CNNs and ViTs by choice of architecture. We can go around by rezising (shrinking or interpolating) but we are not ideally using either the image details or the efficiency of the CNN. (same for channels)
 
 b) There is a trcik in timm that allows to use pretrained models with different image resolution and number of classes. Try to reload the model to be able to use on MNIST images:
 c) redo the training with the pretrained ViT-S
+![[Pasted image 20231102181533.png]]
 c) redo the training but with the ViT-S pretrained on ImageNet
 d) Comment the final results and provide some ideas on how to make transformer work on small datasets. You can take inspiration from some recent work. \\
 --> Transformers as many NNs are overparametrized for small datasets and we have to rely on regularization techniques (e.g. early stopping, dropout,...) or increase the number of training samples (e.g. training augmentations, pre-training on a different dataset and finetuning afterwards (transfer learning),...)
-
+![[Pasted image 20231102202815.png]]
 #TODO run the notebook in the gpus
 
 #TODO : check the questions

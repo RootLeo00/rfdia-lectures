@@ -140,15 +140,15 @@ You can see it in the code, or otherwise here:
 
 |Layer | Size of the output | Number of weights|
 | -------- |------------|-----------|
-|Input |32x32x3 |0|
+|Input |3x32x32 |0|
 |conv1 |32x32x32 |5x5x3x32 + 32 = 2432|
-|pool1 |16x16x32 |0|
-|conv2 |16x16x64 |5x5x32x64 +64 = 51264| 
-|pool2 |8x8x64 |0|
-|conv3 |8x8x64 |5x5x64x64 + 64= 102464|
-|pool3 |4x4x64| 0|
-|fc4 |1000 |4x4x64x1000 +1000 = 1025000|
-|fc5 |10| 1000*10 +10 = 10010|
+|pool1 |32x16x16 |0|
+|conv2 |64x16x16 |5x5x32x64 +64 = 51264| 
+|pool2 |64x8x8 |0|
+|conv3 |64x8x8 |5x5x64x64 + 64= 102464|
+|pool3 |64x4x4| 0|
+|fc4 |1000 |1000x64x4x4 +1000 = 1025000|
+|fc5 |10| 10x1000 +10 = 10010|
 
  Total number of parameters = 1 191 170
 
@@ -344,7 +344,7 @@ Preprocessing should not be learned on the test dataset, as it would bias the ob
 ### 21. Bonus : There are other normalization schemes that can be more efficient like ZCA normalization. Try other methods, explain the differences and compare them to the one requested.
 We tried to perform ZCA normalization: to calculate the ZCA transformation matrix we use PCA by scikit-learn and saved it in an external file. After computing that, we trained the the neural network using the ZCA normalization instead of the standard normalization.
 The results that we obtained are very bad compared to the previous ones: the accuracy is very low and oscillates too much. Here we show the results of an experiment with the following hyperparameters batch_size=128, lr=0.1, epochs=50, cuda=True
-#TODO 
+![[Pasted image 20231030183306.png]]
 
 ---
 # 3.2 Increase in the number of training examples by data increase
@@ -402,16 +402,16 @@ Other possible variants of the SDG are:
 - Adam
 - ...
 Here is an experiment with Adam:
-Experiment: batch_size=128, lr=0.1, epochs=50, cuda=True
-#TODO
+Experiment: batch_size=128, lr=0.01, epochs=50, cuda=True
+![[Pasted image 20231030233513.png]]
 
-efficient for large datasets and noisy data. Can converge to suboptimal solutions, requires tuning of hyperparameters.
+In theory, it should be efficient for large datasets and noisy data. However, it requires tuning of hyperparameters and that's why here it performed so poorly.
 
 Here is an experiment with SGD with momentum (Momentum Gradient Descent):
 Experiment: batch_size=128, lr=0.1, epochs=50, cuda=True
-#TODO 
+![[Pasted image 20231030235949.png]]
 
-Fast convergence, less likely to get stuck in local minima. May overshoot and oscillate around the optimum.
+Fast convergence and it is less likely to get stuck in local minima. Compared to the SGD without momentum, the test functions have a lower fluctuation degree.
 
 
 
@@ -439,12 +439,8 @@ However, it's important to note that when dropout is applied, the network's expr
 The parameter 'p' corresponds to the probability of a neuron being deactivated through dropout. The choice of this probability is a crucial decision in implementing dropout effectively.
 
 If 'p' is set too high, meaning that a substantial portion of neurons is deactivated during each training iteration, we run the risk of underfitting. Underfitting occurs when the model is too constrained and unable to capture the underlying patterns in the data, leading to poor performance.
-Experiment:
-#TODO
-	
 On the other hand, if 'p' is set too low, where only a small fraction of neurons are deactivated, we may not fully realize the benefits of dropout. In such cases, the model might still be prone to overfitting, as it doesn't experience enough regularization to prevent it from learning noise present in the training data.
 Experiment:
-#TODO
 
 Choosing the right value for 'p' is a trade-off, and it often involves experimentation. The goal is to strike a balance between preventing overfitting and allowing the network to generalize effectively to new, unseen data.
 
@@ -460,7 +456,7 @@ The test accuracy improved again and also the loss has decreased again. Thanks t
 
 We tried to use the increased number of epochs:
 Experiment: batch_size=128, lr=0.1, epochs=100, cuda=True
-#TODO
+![[Pasted image 20231031004747.png]]
 
 ## Conclusions
 Al the experiments were run on a GPU NVIDIA A100 80GB.
