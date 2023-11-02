@@ -1,5 +1,4 @@
 import math
-import torch
 from torch.autograd import Variable
 import numpy as np
 import matplotlib
@@ -7,6 +6,7 @@ import matplotlib.pyplot as plt
 from utils import CirclesData
 
 import torch
+import torch.nn as nn
 
 class simpleNN(torch.nn.Module):
     def __init__(self, input_size, hidden_size, output_size):
@@ -42,21 +42,37 @@ def init_model(nx, nh, ny, eta):
     return model, loss, optim
 
 
-def loss_accuracy(Yhat, Y):
-    L = 0
-    acc = 0
+def loss_accuracy(loss, Yhat, Y):
+    """
+    Calculate the loss and accuracy of the model's predictions.
 
-    # Compute the cross-entropy loss
-    L = -torch.mean(torch.sum(Y * torch.log(Yhat), dim=1))
+    Parameters:
+    - Yhat: Predicted values (torch.Tensor) with shape (batch_size, num_classes)
+    - Y: Ground truth labels (torch.Tensor) with shape (batch_size, num_classes)
 
-    # Compute the precision (accuracy)
-    _, indsY = torch.max(Y, 1)
-    _, indsYhat = torch.max(Yhat, 1)
-    correct_predictions = torch.sum(indsY == indsYhat)
-    acc = torch.mean(correct_predictions.float())
+    Returns:
+    - L: Loss (scalar, torch.Tensor)
+    - acc: Accuracy (percentage, float)
+    """
+
+    assert Yhat.size() == Y.size() # catch dimension errors early on
+
+    epsilon = 1e-10
+
+    L = loss(Yhat, Y)
+
+    # Get the predicted class labels by taking the argmax along axis 1 (columns)
+    _, indsY = torch.max(Yhat, 1)
+
+    # Convert one-hot encoded true labels back to class indices
+    _, inds_true = torch.max(Y, 1)
+
+    # Compare the predicted labels with the true labels and calculate accuracy
+    correct = torch.sum(indsY == inds_true)
+    total = Y.size(0)  # Number of samples in the batch
+    acc = correct.item() / total
 
     return L, acc
-
 
 
 def main():

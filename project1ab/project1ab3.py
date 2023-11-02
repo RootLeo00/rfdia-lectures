@@ -1,12 +1,13 @@
 import math
-import torch
 from torch.autograd import Variable
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 from utils import CirclesData
+from tqdm import tqdm
 
 import torch
+import torch.nn as nn
 
 class simpleNN(torch.nn.Module):
     def __init__(self, input_size, hidden_size, output_size):
@@ -107,6 +108,8 @@ def main():
     eta = 0.03
 
     model, loss = init_model(nx, nh, ny)
+    train_loss=0
+    train_accuracy=0
 
     curves = [[],[], [], []]
     iterations = 100

@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 from utils import CirclesData
+from tqdm import tqdm
 
 def init_params(nx, nh, ny, std = 0.3, mean = 0):
     """
