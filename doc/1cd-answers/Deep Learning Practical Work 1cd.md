@@ -272,7 +272,6 @@ def train(self, mode=True):
 		module.train(mode)
 	return self
 ```
-Here is a revised version with corrected grammar:
 
 As demonstrated in the code above, the `model.train()` function sets the modules in the network to the training mode. It informs our model that we are presently in the training phase, allowing certain layers such as dropout and batch normalization, which behave differently based on the current phase, to be activated. Conversely, `model.eval()` performs the opposite function. During the training mode, BatchNorm updates a moving average with each new batch, whereas, during the evaluation mode, these updates are suspended. Therefore, upon calling `model.eval()`, these layers are deactivated, ensuring that the model produces its inference as expected.
 
@@ -448,7 +447,6 @@ The parameter 'p' corresponds to the probability of a neuron being deactivated t
 
 If 'p' is set too high, meaning that a substantial portion of neurons is deactivated during each training iteration, we run the risk of underfitting. Underfitting occurs when the model is too constrained and unable to capture the underlying patterns in the data, leading to poor performance.
 On the other hand, if 'p' is set too low, where only a small fraction of neurons are deactivated, we may not fully realize the benefits of dropout. In such cases, the model might still be prone to overfitting, as it doesn't experience enough regularization to prevent it from learning noise present in the training data.
-Experiment:
 
 Choosing the right value for 'p' is a trade-off, and it often involves experimentation. The goal is to strike a balance between preventing overfitting and allowing the network to generalize effectively to new, unseen data.
 
