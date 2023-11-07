@@ -1,6 +1,6 @@
 ### Introduction
-This project is an introduction to neural networks: our aim is to construct a basic neural network and familiarize individuals with training using backpropagation. 
-The content, code, and PDF version of the file are available at https://rdfia.github.io.
+For this project we worked on an introduction to neural networks: the aim was to build a basic neural network from scratch and to familiarize ourselves with the concept of training using backpropagation. 
+The documentation, our code and the report as PDF version are available here: https://rdfia.github.io.
 
 The primary goals are: 
 1) Building a Simple Neural Network, to understand the fundamental structure of neural networks for a simple classification task and implementing them using PyTorch; 
@@ -12,12 +12,16 @@ As a bonus, we have trained a SVM (Support Vector Machine) on the 'Circle datase
 ## 1.1 Supervised dataset
 
 ### 1. What are the train, val and test sets used for?
-When we would like to use a model for a specific task, we usually go through several stages. The main ones are training, which is the time when you want your model to learn the task; validation, which is used to validate your training (for example, to understand if it is overfitting) or to select the best model with the best hyper-parameters; and finally, testing your model by asking it to perform the intended task. It is important that each step has its own portion of the data that is not the same as the data used in other steps. For example, if you test your model with the same data used in training, you would probably get good results, but it would be akin to cheating. The same applies to using the validation set as the test set.
+Neural networks (given by pre-specified model) are usually trained with a specific task in mind. To do this, one goes through several stages - the main ones being training, validation and testing. 
+Training = the time when you want your model to learn the task at hand given a set of representative traning examples; validation = is used to validate your training (for example, to understand if it is overfitting) or for model selection (to select the best hyper-parameters) or to check for unexpected behaviour on unseen data; and finally, testing your model = asking it to perform the intended task on new data to evalute its performance (e.g. for comparison with previous work, SOTA, ...). 
+
+It is important that each step has its own separete 'dataset' (= proportion of the data that is not the same as the data used during the other steps). For example, if we want to test our model with the same data used in training, you would probably get good results, but we would in a sense 'cheat' in evaluating our trained model. The same applies to the validation set as well as the test set.
 
 In the end:
 ➤ Training set: used to train a given/chosen model on this data.
-➤ Validation set: used for model selection (assists in fine-tuning the model). The test set should remain untouched to avoid falsifying the generalization error.
-➤ Test set: used for the final model evaluation. This data should be kept separate from the training process. During the final evaluation, the model encounters this data for the first time.
+➤ Validation set: used for model selection (or fine-tuning hyper-parameters). Not to be confused with the test set.
+➤ Test set: used in the final step for the model evaluation. This data should be kept away from the model during the traning and valudation passes. During the final evaluation, the model encounters this data for the first time. We want to get a good estimate for the generalization error by using 'new' data during this stage. 
+
 ### 2. What is the influence of the number of examples N ?
 Typically, the greater the number of available examples, the better the results you can achieve. If one trains a complex model with too little data, the model parameters will overly adapt to the limited training examples, potentially leading to overfitting ( ⇒ see bias-variance trade-off for more information on overfitting and model choice). Usually, there's no downside to training a model with too much data, except that it would be much more time-consuming.
 
