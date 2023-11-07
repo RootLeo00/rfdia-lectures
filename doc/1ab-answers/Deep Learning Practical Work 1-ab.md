@@ -5,10 +5,10 @@ The content, code, and PDF version of the file are available at https://rdfia.gi
 The primary goals are: 
 1) Building a Simple Neural Network, to understand the fundamental structure of neural networks for a simple classification task and implementing them using PyTorch; 
 2) Training with Backpropagation
-   
-Furthermore, we have implemented this network with PyTorch, introducing forward and backward passes, simplifications using torch.autograd, torch.nn layers, torch.optim for optimization, and eventually applying the learned concepts to the MNIST dataset.
 
-Additionally, we have trained a Support Vector Machine (SVM) on the Circle dataset.
+We have additionally implemented everything in PyTorch, introducing the model with forward and backward pass & simplifications using torch.autograd, torch.nn layers and torch.optim for optimization. We applied these concepts to and tested with the MNIST dataset.
+As a bonus, we have trained a SVM (Support Vector Machine) on the 'Circle dataset'. 
+
 ## 1.1 Supervised dataset
 
 ### 1. What are the train, val and test sets used for?
