@@ -43,6 +43,33 @@ plt.style.use('seaborn-white')
 
 # ------------------------------ ZCA utils functions ---------------------------------
 
+#calculate pca
+# Calculate pca.pkl
+
+from sklearn.decomposition import PCA
+import numpy as np
+import matplotlib.pyplot as plt
+from PIL import Image
+import pickle as pk
+
+# call these function to generate pca.pkl
+def calculate_pca(dataset):
+    # save pca.pkl calculated on cifar dataset
+    dd = np.vstack(tuple(unpickle("./dataset/cifar-10-batches-py/data_batch_{}".format(n))[b'data'] for n in range(1,6)))
+    calculate_pca(dd)
+    # initialize PCA
+    pca = PCA(n_components=400, random_state=0, svd_solver='randomized')
+    # fit PCA to dataset
+    pca.fit(dataset)
+    pk.dump(pca, open("pca.pkl","wb"))
+
+def unpickle(file):
+    import pickle
+    with open(file, 'rb') as fo:
+        dict = pickle.load(fo, encoding='bytes')
+    return dict
+
+
 class ZCA_whitening(object):
     """Normalize images according to ZCA"""
 
