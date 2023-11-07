@@ -24,5 +24,6 @@ To run locally, each project is inside a specific folder and in each folder ther
 # Important details
 1) We have decided to provide both the .ipynb and the .py files, allowing the reader the choice to select the format they prefer. We guarantee that each .ipynb notebook file and its corresponding .py file are semantically identical.
 2) In order to keep the repository lightweight, we have decided to not upload datasets or image results. Therefore, if one would like to run the individual .py files, the dataset should be downloaded first. 
+3) This repository could also be found at https://github.com/RootLeo00/rfdia-lectures
 
 
