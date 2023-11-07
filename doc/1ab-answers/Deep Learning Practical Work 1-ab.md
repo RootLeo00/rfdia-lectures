@@ -1,9 +1,9 @@
 ### Introduction
-This project is an introduction to neural networks: our aim is to construct a basic neural network and familiarize individuals with training using backpropagation. 
-The content, code, and PDF version of the file are available at https://rdfia.github.io.
+For this project we worked on an introduction to neural networks: the aim was to build a basic neural network from scratch and to familiarize ourselves with the concept of training using backpropagation. 
+The documentation, our code and the report as PDF version are available here: https://rdfia.github.io.
 
 The primary goals are: 
-1) Building a Simple Neural Network, to understand the fundamental structure of neural networks for a simple classification task and implementing them using PyTorch; 
+1) Building a Simple Neural Network, to understand the fundamental structure of neural networks for a simple classification task and implementing them using PyTorch 
 2) Training with Backpropagation
 
 We have additionally implemented everything in PyTorch, introducing the model with forward and backward pass & simplifications using torch.autograd, torch.nn layers and torch.optim for optimization. We applied these concepts to and tested with the MNIST dataset.
@@ -12,12 +12,16 @@ As a bonus, we have trained a SVM (Support Vector Machine) on the 'Circle datase
 ## 1.1 Supervised dataset
 
 ### 1. What are the train, val and test sets used for?
-When we would like to use a model for a specific task, we usually go through several stages. The main ones are training, which is the time when you want your model to learn the task; validation, which is used to validate your training (for example, to understand if it is overfitting) or to select the best model with the best hyper-parameters; and finally, testing your model by asking it to perform the intended task. It is important that each step has its own portion of the data that is not the same as the data used in other steps. For example, if you test your model with the same data used in training, you would probably get good results, but it would be akin to cheating. The same applies to using the validation set as the test set.
+Neural networks (given by pre-specified model) are usually trained with a specific task in mind. To do this, one goes through several stages - the main ones being training, validation and testing. 
+Training = the time when you want your model to learn the task at hand given a set of representative traning examples; validation = is used to validate your training (for example, to understand if it is overfitting) or for model selection (to select the best hyper-parameters) or to check for unexpected behaviour on unseen data; and finally, testing your model = asking it to perform the intended task on new data to evalute its performance (e.g. for comparison with previous work, SOTA, ...). 
+
+It is important that each step has its own separete 'dataset' (= proportion of the data that is not the same as the data used during the other steps). For example, if we want to test our model with the same data used in training, you would probably get good results, but we would in a sense 'cheat' in evaluating our trained model. The same applies to the validation set as well as the test set.
 
 In the end:
-➤ Training set: used to train a given/chosen model on this data.
-➤ Validation set: used for model selection (assists in fine-tuning the model). The test set should remain untouched to avoid falsifying the generalization error.
-➤ Test set: used for the final model evaluation. This data should be kept separate from the training process. During the final evaluation, the model encounters this data for the first time.
+➤ Training set: used to train a given/chosen model on this data. <br>
+➤ Validation set: used for model selection (or fine-tuning hyper-parameters). Not to be confused with the test set. <br>
+➤ Test set: used in the final step for the model evaluation. This data should be kept away from the model during the traning and valudation passes. During the final evaluation, the model encounters this data for the first time. We want to get a good estimate for the generalization error by using 'new' data during this stage. 
+
 ### 2. What is the influence of the number of examples N ?
 Typically, the greater the number of available examples, the better the results you can achieve. If one trains a complex model with too little data, the model parameters will overly adapt to the limited training examples, potentially leading to overfitting ( ⇒ see bias-variance trade-off for more information on overfitting and model choice). Usually, there's no downside to training a model with too much data, except that it would be much more time-consuming.
 
@@ -114,27 +118,26 @@ Mini-batch stochastic gradient descent updates the model’s parameters based on
 
 ### 11. What is the influence of the learning rate η on learning?
 
-The optimization process of the loss function is mathematically uncertain and cannot be solved in an analytical form. This is why we have to rely on numerical methods or optimization schemes that take into account the local gradient with respect to the loss. The "loss landscape" refers to the multidimensional representation of the loss function in relation to various parameters, showing the challenges in finding the optimal solution due to the function's non-convex nature, impacting the search for the global minimum during optimization. This figure shows a loss landscape concerning our input data (the loss function is expressed as: $L(\theta_i | \{x_i\})$. It's not guaranteed that we can find the global minimum because the loss function is not necessarily a log-convex function or a convex function.
+The optimization process of the loss function cannot be done in closed form/analytically and it is therefore uncertain if the perfeect/global mimuman can be found. This is why we have to rely on numerical methods. The optimization schemes for ML take into account the local gradient with respect to the loss and from there calculate the next step in the scheme. The "loss landscape" refers to the (multidimensional) representation of the loss function with respect to various parameters. The challenge is finding the global optimum (in parameter space) of a function that is not (strictly) convex or concave. This impacts the search for the global minimum during optimization. The figure below shows a sample loss landscape (the loss function is expressed as: $L(\theta_i | \{x_i\})$. It's not guaranteed that we can find the global minimum. 
 ![[Pasted image 20231028155341.png]]
-The optimization schemes depend on several hyperparameters, including the learning rate, momentum, or Nesterov's acceleration.
 
 The learning rate $\eta$ determines the incremental rate at which the gradient descent algorithm is updated. A large $\eta$ will take big steps and converge faster to a sensible point but might overshoot and fail to find finer details (finetuning).
 
-On the contrary, a learning rate that is too small will result in getting stuck in local minima or not converging fast enough. To enhance performance, different update algorithms have been developed that take into account factors such as momentum (Adam) or the future state (Ada).
+On the contrary, a learning rate that is too small will result in getting stuck in local minima or not converging fast enough. To enhance performance of our optimization, more advanced update algorithms have been developed that take into account for example momentum (Adam) or the future state (Ada). (The optimization schemes then depend on several hyperparameters, including the learning rate, momentum, or Nesterov's acceleration, ...). 
+
 ### 12. **Compare the complexity (depending on the number of layers in the network) of calculating the gradients of the loss with respect to the parameters, using the naive approach and the backpropagation algorithm.**
 
 **Naive Approach**:
-In the naive approach, you would directly compute the gradients of the loss with respect to the parameters using the definition of the derivative. 
-- For each parameter, you perform a forward pass through the entire network, which has a computational cost of $O(N)$ for one parameter.
-- You need to compute the derivative with respect to each parameter individually, resulting in $O(N)$ operations for each parameter.
+$\to $ you would directly compute the gradients of the loss with respect to the parameters:
+For each parameter one performs a forward pass through the NN at a computational cost of $O(N)$ for a single parameter. We need to compute the derivative with respect to each parameter individually, resulting in $O(N)$ operations for each parameter.
 
 So, the total computational complexity for the naive approach is $O(N^2)$, as you're repeating this process for each parameter. This becomes impractical as the number of parameters increases.
 
 **Backpropagation Algorithm**:
 
-Backpropagation is a much more efficient and scalable approach for calculating gradients in neural networks. It leverages the chain rule of calculus to compute gradients layer by layer, starting from the output layer and moving backward through the network. The algorithm computes the gradients efficiently without redundant calculations. 
-- You perform one forward pass through the network, which has a computational cost of $O(N)$ where N is the total number of parameters in the network.
-- You then perform a backward pass, which computes gradients layer by layer. The backward pass is roughly $O(L)$ because you compute gradients for each layer in sequence.
+Backpropagation is a much more efficient approach for calculating gradients in neural networks. By leveraging the chain rule to compute gradients, starting at the output layer and moving backward through the network.
+- Perform one forward pass through the network at a computational cost of $O(N)$, where N is the total number of parameters
+- Perform a backward pass, which computes gradients layer by layer. The backward pass is roughly $O(L)$ because you compute gradients for each layer in sequence
 - Within each layer, the computation of gradients is $O(N)$, as it depends on the number of parameters in that layer.
 
 The total computational complexity of backpropagation is $O(L * N)$, which scales linearly with the number of layers and parameters in the network. This is significantly more practical for deep neural networks.
