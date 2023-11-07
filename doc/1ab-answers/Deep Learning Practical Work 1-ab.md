@@ -128,17 +128,16 @@ On the contrary, a learning rate that is too small will result in getting stuck 
 ### 12. **Compare the complexity (depending on the number of layers in the network) of calculating the gradients of the loss with respect to the parameters, using the naive approach and the backpropagation algorithm.**
 
 **Naive Approach**:
-In the naive approach, you would directly compute the gradients of the loss with respect to the parameters using the definition of the derivative. 
-- For each parameter, you perform a forward pass through the entire network, which has a computational cost of $O(N)$ for one parameter.
-- You need to compute the derivative with respect to each parameter individually, resulting in $O(N)$ operations for each parameter.
+$\to $ you would directly compute the gradients of the loss with respect to the parameters:
+For each parameter one performs a forward pass through the NN at a computational cost of $O(N)$ for a single parameter. We need to compute the derivative with respect to each parameter individually, resulting in $O(N)$ operations for each parameter.
 
 So, the total computational complexity for the naive approach is $O(N^2)$, as you're repeating this process for each parameter. This becomes impractical as the number of parameters increases.
 
 **Backpropagation Algorithm**:
 
-Backpropagation is a much more efficient and scalable approach for calculating gradients in neural networks. It leverages the chain rule of calculus to compute gradients layer by layer, starting from the output layer and moving backward through the network. The algorithm computes the gradients efficiently without redundant calculations. 
-- You perform one forward pass through the network, which has a computational cost of $O(N)$ where N is the total number of parameters in the network.
-- You then perform a backward pass, which computes gradients layer by layer. The backward pass is roughly $O(L)$ because you compute gradients for each layer in sequence.
+Backpropagation is a much more efficient approach for calculating gradients in neural networks. By leveraging the chain rule to compute gradients, starting at the output layer and moving backward through the network.
+- Perform one forward pass through the network at a computational cost of $O(N)$, where N is the total number of parameters
+- Perform a backward pass, which computes gradients layer by layer. The backward pass is roughly $O(L)$ because you compute gradients for each layer in sequence
 - Within each layer, the computation of gradients is $O(N)$, as it depends on the number of parameters in that layer.
 
 The total computational complexity of backpropagation is $O(L * N)$, which scales linearly with the number of layers and parameters in the network. This is significantly more practical for deep neural networks.
