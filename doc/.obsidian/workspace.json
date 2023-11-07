@@ -11,8 +11,12 @@
             "id": "4e9f15b2d1753b60",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {}
+              "type": "markdown",
+              "state": {
+                "file": "1e-answers/Transformers.md",
+                "mode": "source",
+                "source": false
+              }
             }
           }
         ]
@@ -81,6 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "1e-answers/Transformers.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -97,6 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "1e-answers/Transformers.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -118,7 +124,9 @@
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {}
+              "state": {
+                "file": "1e-answers/Transformers.md"
+              }
             }
           }
         ]
@@ -140,10 +148,12 @@
   },
   "active": "4e9f15b2d1753b60",
   "lastOpenFiles": [
+    "1e-answers/images/Pasted image 20231107232045.png",
+    "1e-answers/images/Pasted image 20231107223718.png",
     "1cd-answers/Deep Learning Practical Work 1cd.md",
     "1e-answers/Transformers.md",
-    "1cd-answers/rdfia_1-cd.pdf",
     "1ab-answers/Deep Learning Practical Work 1-ab.md",
+    "1cd-answers/rdfia_1-cd.pdf",
     "1ab-answers/rdfia_1-ab.pdf",
     "1cd-answers/Deep Learning Practical Work 1cd.pdf",
     "1ab-answers/Deep Learning Practical Work 1-ab.pdf",
@@ -161,7 +171,6 @@
     "1ab-answers/external-notes/1ab-answer16-17_231021_142243.pdf",
     "1ab-answers/external-notes/backpropagation_cheatsheet_less2.pdf",
     "1ab-answers/external-notes",
-    "1cd-answers/images/Pasted image 20231021171542.png",
     "1cd-answers/images"
   ]
 }
