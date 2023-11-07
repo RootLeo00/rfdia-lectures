@@ -17,7 +17,7 @@ Each project is inside a specific folder and in each folder there is a requireme
 
 Each project folder is composed of 
 - a monolitic notebook (.ipynb) that contains all the code parts of the single assignment 
-- the single files (.py) for each part of the project assignment
+- the single files (.py) for each part of the project assignment. Each file is named with the specific part that is related to (for example, **project1cd3_1_bonus.py**, is the implementation of the notebook 1cd --> section 3.1 --> bonus part )
 - the PDF file with the assignment guide
 - the PDF file with the answers and analyses to the questions of the assignment guide
 - [optional] folders or files containing datasets
