@@ -3,7 +3,7 @@ For this project we worked on an introduction to neural networks: the aim was to
 The documentation, our code and the report as PDF version are available here: https://rdfia.github.io.
 
 The primary goals are: 
-1) Building a Simple Neural Network, to understand the fundamental structure of neural networks for a simple classification task and implementing them using PyTorch; 
+1) Building a Simple Neural Network, to understand the fundamental structure of neural networks for a simple classification task and implementing them using PyTorch 
 2) Training with Backpropagation
 
 We have additionally implemented everything in PyTorch, introducing the model with forward and backward pass & simplifications using torch.autograd, torch.nn layers and torch.optim for optimization. We applied these concepts to and tested with the MNIST dataset.
