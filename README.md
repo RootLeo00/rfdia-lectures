@@ -1,16 +1,5 @@
 # Deep Learning for Computer Vision - Project Work 1ab-1cd-1e
 
-This is a repository for the Deep Learning for Computer Vision course taught at the DAC and IMA master at Sorbonne Université by Prof. Matthieu Cord & his team.
-
-## Table of Contents
-
-- [Deep Learning for Computer Vision - Project Work 1ab-1cd-1e](#deep-learning-for-computer-vision---project-work-1ab-1cd-1e)
-  - [Table of Contents](#table-of-contents)
-  - [Repository organization](#repository-organization)
-  - [Installation and Usage](#installation-and-usage)
-- [Important details](#important-details)
-
-
 ## Repository organization
 
 Each project folder is composed of 
