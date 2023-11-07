@@ -1,12 +1,26 @@
-# TODO
+# Project Title
 
-- revision of all answer by LUISA
-- tests (see TODO) --> DONE
-- train and test transformer --> DONE
-- put bonus part in the notebook --> DONE
-- final readme
-- final requirements.txt --> DONE
-- zip everything clean
-- revise pdf for syntax or typo  --> DONE
-- question 10.  For each layer, indicate the output size and the number of weights to learn. Comment on this repartition. --> do it in the code -->DONE
--  copy project1ab from notebook in this repo --> DONE
+This is a repository for the Deep Learning for Computer Vision course taught at the DAC and IMA master at Sorbonne Université by Prof. Matthieu Cord & his team.
+
+## Table of Contents
+
+- [Project Title](#project-title)
+  - [Table of Contents](#table-of-contents)
+  - [Installation](#installation)
+  - [Repository organization](#repository-organization)
+
+## Installation
+
+Each project is inside a specific folder and in each folder there is a requirements.txt file.
+
+## Repository organization
+
+Each project folder is composed of 
+- a monolitic notebook (.ipynb) that contains all the code parts of the single assignment 
+- the single files (.py) for each part of the project assignment
+- the PDF file with the assignment guide
+- the PDF file with the answers and analyses to the questions of the assignment guide
+- [optional] folders or files containing datasets
+- [optional] folders or files containing results
+
+
