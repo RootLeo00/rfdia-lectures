@@ -18,8 +18,8 @@ Training = the time when you want your model to learn the task at hand given a s
 It is important that each step has its own separete 'dataset' (= proportion of the data that is not the same as the data used during the other steps). For example, if we want to test our model with the same data used in training, you would probably get good results, but we would in a sense 'cheat' in evaluating our trained model. The same applies to the validation set as well as the test set.
 
 In the end:
-➤ Training set: used to train a given/chosen model on this data.
-➤ Validation set: used for model selection (or fine-tuning hyper-parameters). Not to be confused with the test set.
+➤ Training set: used to train a given/chosen model on this data. <br>
+➤ Validation set: used for model selection (or fine-tuning hyper-parameters). Not to be confused with the test set. <br>
 ➤ Test set: used in the final step for the model evaluation. This data should be kept away from the model during the traning and valudation passes. During the final evaluation, the model encounters this data for the first time. We want to get a good estimate for the generalization error by using 'new' data during this stage. 
 
 ### 2. What is the influence of the number of examples N ?
@@ -118,13 +118,13 @@ Mini-batch stochastic gradient descent updates the model’s parameters based on
 
 ### 11. What is the influence of the learning rate η on learning?
 
-The optimization process of the loss function is mathematically uncertain and cannot be solved in an analytical form. This is why we have to rely on numerical methods or optimization schemes that take into account the local gradient with respect to the loss. The "loss landscape" refers to the multidimensional representation of the loss function in relation to various parameters, showing the challenges in finding the optimal solution due to the function's non-convex nature, impacting the search for the global minimum during optimization. This figure shows a loss landscape concerning our input data (the loss function is expressed as: $L(\theta_i | \{x_i\})$. It's not guaranteed that we can find the global minimum because the loss function is not necessarily a log-convex function or a convex function.
+The optimization process of the loss function cannot be done in closed form/analytically and it is therefore uncertain if the perfeect/global mimuman can be found. This is why we have to rely on numerical methods. The optimization schemes for ML take into account the local gradient with respect to the loss and from there calculate the next step in the scheme. The "loss landscape" refers to the (multidimensional) representation of the loss function with respect to various parameters. The challenge is finding the global optimum (in parameter space) of a function that is not (strictly) convex or concave. This impacts the search for the global minimum during optimization. The figure below shows a sample loss landscape (the loss function is expressed as: $L(\theta_i | \{x_i\})$. It's not guaranteed that we can find the global minimum. 
 ![[Pasted image 20231028155341.png]]
-The optimization schemes depend on several hyperparameters, including the learning rate, momentum, or Nesterov's acceleration.
 
 The learning rate $\eta$ determines the incremental rate at which the gradient descent algorithm is updated. A large $\eta$ will take big steps and converge faster to a sensible point but might overshoot and fail to find finer details (finetuning).
 
-On the contrary, a learning rate that is too small will result in getting stuck in local minima or not converging fast enough. To enhance performance, different update algorithms have been developed that take into account factors such as momentum (Adam) or the future state (Ada).
+On the contrary, a learning rate that is too small will result in getting stuck in local minima or not converging fast enough. To enhance performance of our optimization, more advanced update algorithms have been developed that take into account for example momentum (Adam) or the future state (Ada). (The optimization schemes then depend on several hyperparameters, including the learning rate, momentum, or Nesterov's acceleration, ...). 
+
 ### 12. **Compare the complexity (depending on the number of layers in the network) of calculating the gradients of the loss with respect to the parameters, using the naive approach and the backpropagation algorithm.**
 
 **Naive Approach**:
