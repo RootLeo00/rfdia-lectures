@@ -1,6 +1,16 @@
+### Introduction
+In this project we analyzed the fundamental blocks of CNNs and we have implemented an  initial network trained on the CIFAR-10 dataset. We also explored several techniques to develop the learning process of the network, adding normalization, data augmentation, different stochastic gradient descent variants, dropout, and batch normalization.
+
+In our first phase, we analyzed the principles of convolution and pooling layers. 
+In the second phase we trained a model from scratch on the CIFAR-10 database. Our model, inspired by the AlexNet architecture but tailored to fit the specifics of the CIFAR-10 dataset, comprises convolutional and max-pooling layers, fully-connected layers, and the  softmax function for classification purposes.
+In the final stage, our aim is to enhance the model's performance. We'll explore several techniques to refine and optimize the learning process:
+- Standardization: normalizing images by calculating mean values and standard deviations for each RGB channel.
+- Data Augmentation techniques: generating variations of existing images through methods like random cropping and horizontal symmetry.
+- Variants on the Optimization Algorithm: to fine-tune the stochastic gradient descent for improved convergence.
+- Dropout layers: to prevent overfitting
+
 ### 1. Considering a single convolution filter of padding p, stride s and kernel size k, for an input of size x × y × z what will be the output size ? How much weight is there to learn ? How much weight would it have taken to learn if a fully-connected layer were to produce an output of the same size ?
 The output size of a convolutional layer can be calculated using the following formula:
-
 
 1. **Output Size**:
     

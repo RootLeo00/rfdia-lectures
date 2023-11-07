@@ -1,4 +1,16 @@
+### Introduction
+This project is an introduction to neural networks: our aim is to construct a basic neural network and familiarize individuals with training using backpropagation. 
+The content, code, and PDF version of the file are available at https://rdfia.github.io.
+
+The primary goals are: 
+1) Building a Simple Neural Network, to understand the fundamental structure of neural networks for a simple classification task and implementing them using PyTorch; 
+2) Training with Backpropagation
+   
+Furthermore, we have implemented this network with PyTorch, introducing forward and backward passes, simplifications using torch.autograd, torch.nn layers, torch.optim for optimization, and eventually applying the learned concepts to the MNIST dataset.
+
+Additionally, we have trained a Support Vector Machine (SVM) on the Circle dataset.
 ## 1.1 Supervised dataset
+
 ### 1. What are the train, val and test sets used for?
 When we would like to use a model for a specific task, we usually go through several stages. The main ones are training, which is the time when you want your model to learn the task; validation, which is used to validate your training (for example, to understand if it is overfitting) or to select the best model with the best hyper-parameters; and finally, testing your model by asking it to perform the intended task. It is important that each step has its own portion of the data that is not the same as the data used in other steps. For example, if you test your model with the same data used in training, you would probably get good results, but it would be akin to cheating. The same applies to using the validation set as the test set.
 

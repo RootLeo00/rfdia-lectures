@@ -1,4 +1,11 @@
-# Here is the general architecture of the ViT model
+### Introduction
+In this project we explore the Visual Transformer (ViT), by implementing a crafting a simplified, smaller version of it. 
+
+We first implemented the fundamentals of the ViT from scratch, creating components such as patch embeddings, self-attention mechanisms, multi-head self-attention, and constructing transformer blocks. 
+
+Secondly, we re-implemented the ViT using the Timm library and evaluated the network on MNIST datasets. We also compared the network with pretrained weights (on ImageNet) and without.
+
+### Here is the general architecture of the ViT model
 
 ## The architecture includes:
 
