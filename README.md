@@ -1,5 +1,8 @@
 # Deep Learning for Computer Vision - Project Work 1ab-1cd-1e
 
+This is the delivered project implementation of the 1ab-1cd-1e assignments.
+This project was done by Caterina Leonelli (N° etudiant: 21306668) and Luisa Neubauer (N° etudiant: 21228141)
+
 ## Repository organization
 
 Each project folder is composed of 
