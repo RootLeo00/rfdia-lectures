@@ -162,7 +162,7 @@ To calculate the total number of weights to learn in a neural network, you need 
         Number of Weights = (Input Neurons * Output Neurons) + (Output Neurons if there's a bias term)
 3. Sum up the number of weights for all layers to find the total number of weights in your network.
 
-Method by hand:
+Method by hand (you can see also look at the previous table):
 1. Convolutional Layer 1:
     - Input Channels: `3` (assuming color images)
     - Output Channels (Filters): `32`
@@ -338,8 +338,6 @@ Experiment: batch_size=128, lr=0.1, epochs=50, cuda=True
 The training has shown some improvement compared to before. The test accuracy is slightly higher, exceeding 70%, and the minimum test loss is lower than the previous 1.0. However, we still observe an overfitting phenomenon, and the curves for the test and train sets exhibit noticeable differences.
 ### 20. Why only calculate the average image on the training examples and normalize the validation examples with the same image ?
 Preprocessing should not be learned on the test dataset, as it would bias the obtained performance results.
-
-( #TODO :revision)
 
 ### 21. Bonus : There are other normalization schemes that can be more efficient like ZCA normalization. Try other methods, explain the differences and compare them to the one requested.
 We tried to perform ZCA normalization: to calculate the ZCA transformation matrix we use PCA by scikit-learn and saved it in an external file. After computing that, we trained the the neural network using the ZCA normalization instead of the standard normalization.
