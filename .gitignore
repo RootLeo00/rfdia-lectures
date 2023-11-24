@@ -19,3 +19,11 @@ doc/.obsidian/*
 project1e/MNIST/raw
 project1cd/datasets/*
 project1ab/datasets/*
+project2d/MNIST/raw/t10k-images-idx3-ubyte
+project2d/MNIST/raw/t10k-images-idx3-ubyte.gz
+project2d/MNIST/raw/t10k-labels-idx1-ubyte
+project2d/MNIST/raw/t10k-labels-idx1-ubyte.gz
+project2d/MNIST/raw/train-images-idx3-ubyte
+project2d/MNIST/raw/train-images-idx3-ubyte.gz
+project2d/MNIST/raw/train-labels-idx1-ubyte
+project2d/MNIST/raw/train-labels-idx1-ubyte.gz
