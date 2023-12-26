@@ -155,3 +155,4 @@ if not isExist:
    print("The new directory is created!")
   
 plt.savefig("results/latent_space_with_domain_adaptation.png")
+
