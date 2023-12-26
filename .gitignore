@@ -28,3 +28,5 @@ project2d/MNIST/raw/train-images-idx3-ubyte.gz
 project2d/MNIST/raw/train-labels-idx1-ubyte
 project2d/MNIST/raw/train-labels-idx1-ubyte.gz
 project2c/BSR_bsds500.tgz
+project2c/MNIST
+project2c/mnistm_data.pkl
