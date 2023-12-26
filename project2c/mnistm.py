@@ -10,6 +10,21 @@ import skimage
 import skimage.io
 import skimage.transform
 import torchvision
+import torch
+
+class MNISTM(torch.utils.data.Dataset):
+  def __init__(self, x, y, transform):
+    self.x, self.y = x, y
+    self.transform = transform
+
+  def __len__(self):
+    return len(self.x)
+
+  def __getitem__(self, index):
+    x, y = self.x[index], self.y[index]
+    x = self.transform(x)
+
+    return x, y
 
 
 def _compose_image(digit, background):
