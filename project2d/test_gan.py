@@ -33,6 +33,7 @@ def get_args():
     parser.add_argument("--batch-size", type=int, default=128, help="Batch size")
     parser.add_argument("--nchannels", type=int, default=1, help="Number of channels for inputs of Discriminator")
     parser.add_argument("--display-freq", type=int, default=200, help="Display frequency of images")
+    parser.add_argument("--savepath", default="", help="Path to save images on disk")
     
     return parser.parse_args()
 
@@ -47,6 +48,7 @@ def main(args):
     nchannels=args.nchannels
     batch_size=args.batch_size
     display_freq=args.display_freq
+    savepath=args.savepath
 
     # Use args.init_type to decide whether to use custom weight initialization
     if args.init_type == "custom":
@@ -153,7 +155,7 @@ def main(args):
                 # print("generated images")
                 plt.imshow(pil_grid)
                 # plt.show()
-                plt.savefig("./results/generated_img_gan1.png")
+                plt.savefig("./results/generated_img_gan1_"+savepath+".png")
                 plt.clf()
 
                 plt.plot(range(len(g_losses)), g_losses, label='g loss')
@@ -161,7 +163,7 @@ def main(args):
 
                 plt.legend()
                 # plt.show()
-                plt.savefig("./results/losses_gan1.png")
+                plt.savefig("./results/losses_gan1_"+savepath+".png")
                 plt.clf()
 
             j += 1
