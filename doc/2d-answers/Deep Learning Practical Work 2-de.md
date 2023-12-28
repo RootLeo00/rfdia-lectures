@@ -97,15 +97,22 @@ If we decrease it, we obtain good results compared to the baseline. A lower-dime
 ---
 
 **2 – BONUS : Conditional Generative Adversarial Networks**
+
+
 ## 6. Comment on your experiences with the conditional DCGAN.
-#TODO
+The DCGAN represents a notable advancement in the field of generative models, particularly in image generation, compared to the vanilla Generative Adversarial Network (GAN). There are several factors that makes DCGAN better than vanilla GANs:
+- First, DCGAN integrates convolutional layers in both the generator and discriminator. In the generator, these layers progressively upscale and refine the generated images, while in the discriminator, they efficiently process and classify the images. This convolutional architecture is adept at handling the spatial hierarchies in images, leading to the generation of more detailed and coherent visuals.
+- Second, stability during the training process is better compared to vanilla GANs. This is achieved through architectural guidelines like using transpose convolutions instead of pooling layers, applying batch normalization in both the generator and discriminator, and avoiding fully connected hidden layers in deep architectures. These modifications address common issues such as mode collapse (where the generator produces limited varieties of outputs) and help in maintaining a healthy balance between the generator and discriminator, crucial for the successful training of GANs.
+- Third, as a result of these architectural improvements, DCGANs are able to produce images of significantly higher quality compared to vanilla GANs. The images generated are not only more realistic and sharper but also show better coherence in terms of object shapes and textures. This makes DCGAN particularly useful for applications where image quality is paramount.
+- As last, the convolutional nature of DCGAN allows it to learn hierarchical representations of images. In simpler terms, the network learns to recognize and generate patterns and structures at various scales, from basic edges and textures at lower layers to more complex patterns like parts of objects or entire objects at higher layers.
 
 ## 7. Could we remove the vector y from the input of the discriminator (so having cD(x) instead of cD(x, y)) ?
-It is important that the discriminator and generator have access to the y label to generate a desired digit. If we remove the label y from the discriminator inputs, the model will not learn to generate under a condition. The generated numbers will be random like a normal GAN.
+It is important that the discriminator and generator have access to the y label to generate a desired digit. If we remove the label y from the discriminator inputs, the model will not learn to generate under a condition. The generated numbers will be random like a normal GAN. Additionally, experiments have demonstrated that this alteration typically leads to a decrease in the model's performance. The inclusion of y adds valuable contextual information that helps the discriminator make more accurate decisions. Therefore, while simplifying the model by removing y is an option, it's important to consider the potential trade-offs in terms of effectiveness and accuracy.
 
 ## 8. Was your training more or less successful than the unconditional case ? Why ?
-#TODO
+Our training was more successful in the conditional case compared to the unconditional one. The key reason for this improvement is the incorporation of the conditional variable. This additional information provided by the conditional variable plays a crucial role in refining the learning process. It enables the model to understand and adapt to more specific patterns and contexts within the data, leading to smoother and more effective learning. In essence, the conditional variable adds a layer of guidance that helps the model to learn more efficiently and accurately.
 
 ## 9. Test the code at the end. Each column corresponds to a unique noise vector z. What could z be interpreted as here ?
-#TODO
+As seen from the generation, the latent vector z only changes the style of the generated image. Since we have given the condition and it learns according to that, the output image is from the same category/class. This can be seen from the image.
 
+![[Pasted image 20231228155901.png]]
