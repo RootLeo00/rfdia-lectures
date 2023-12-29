@@ -21,7 +21,7 @@ def get_args():
     parser = argparse.ArgumentParser(description="GAN Training Script")
     parser.add_argument("--ngf", type=int, default=32, help="Channel size before the last layer in Generator")
     parser.add_argument("--ndf", type=int, default=32, help="Channel size in Discriminator")
-    parser.add_argument("--init-type", choices=["custom", "pytorch"], default="pytorch",
+    parser.add_argument("--init-type", choices=["custom", "pytorch"], default="custom",
                         help="Weight initialization type")
     parser.add_argument("--loss-type", choices=["true", "default"], default="default",
                         help="Type of training loss for the generator")
@@ -73,9 +73,6 @@ def main(args):
 
     netD = Discriminator(ndf, nchannels).to(device)
     netG = Generator(nz, ngf).to(device)
-
-    netD.apply(weights_init)
-    netG.apply(weights_init)
 
     g_opt = torch.optim.Adam(netG.parameters(), lr=lr_g, betas=(beta1, 0.999))
     d_opt = torch.optim.Adam(netD.parameters(), lr=lr_d, betas=(beta1, 0.999))
