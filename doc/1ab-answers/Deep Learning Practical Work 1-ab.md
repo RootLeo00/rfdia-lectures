@@ -30,7 +30,7 @@ Typically, the greater the number of available examples, the better the results 
 First, it makes the combination of transformations (linear + activation) nonlinear, thus justifying applying several transformations in a row. This is because the composition of (multivariate) linear functions would still be linear. Therefore, without the activation functions, the network would only be able to approximate combinations of linear functions. For more information, refer to the universal approximation theorem (one of the assumptions is having a non-linearity σ).
 Second, it allows choosing an output interval different from R^ny.
 ### 4. What are the sizes nx, nh, ny in the figure 1? In practice, how are these sizes chosen?
-![[Pasted image 20231012154658.png]]
+![300](./images/Pasted%20image%2020231012154658.png)
 In theory, $n_x$ is determined by the size of the input data; therefore, apart from the choice of how to encode the input data, we do not have to choose this value. $n_h$ should be sufficiently large to retain salient information in the process of passing data through the network but sufficiently small for the neural network to extract the most important features. The smaller $n_h$, the tighter the bottleneck of our neural network. $n_y$ is determined by the purpose of our neural network. For classification, for example, $n_y$ depends on the number of output classes.
 
 Specifically, in figure 1, the size of $n_x$ is 2, $n_y$ is 2, and $n_h$ is 4.
@@ -87,9 +87,9 @@ For the sake of simplicity, let's consider the case of y=1:
 $l(y,\hat{y}) = - log \hat{y}$
 $l(y,\hat{y}) =  (1 - \hat{y})^2$
 If we plot these 2 function we get the following:
-![[Pasted image 20231012175551.png]]
+![300](./images/Pasted%20image%2020231012175551.png)
 If we get $\hat{y}=0.1$, then we get these points:
-![[Pasted image 20231012175306.png]]
+![300](./images/Pasted%20image%2020231012175306.png)
 Here the CE function is higher then the penalty will be higher.
 
 Let's write the formula in the case of a single element of the y or $\hat{y}$ vector in the case that 1. 
@@ -119,7 +119,7 @@ Mini-batch stochastic gradient descent updates the model’s parameters based on
 ### 11. What is the influence of the learning rate η on learning?
 
 The optimization process of the loss function cannot be done in closed form/analytically and it is therefore uncertain if the perfeect/global mimuman can be found. This is why we have to rely on numerical methods. The optimization schemes for ML take into account the local gradient with respect to the loss and from there calculate the next step in the scheme. The "loss landscape" refers to the (multidimensional) representation of the loss function with respect to various parameters. The challenge is finding the global optimum (in parameter space) of a function that is not (strictly) convex or concave. This impacts the search for the global minimum during optimization. The figure below shows a sample loss landscape (the loss function is expressed as: $L(\theta_i | \{x_i\})$. It's not guaranteed that we can find the global minimum. 
-![[Pasted image 20231028155341.png]]
+![300](./images/Pasted%20image%2020231028155341.png)
 
 The learning rate $\eta$ determines the incremental rate at which the gradient descent algorithm is updated. A large $\eta$ will take big steps and converge faster to a sensible point but might overshoot and fail to find finer details (finetuning).
 
@@ -151,22 +151,22 @@ The total computational complexity of backpropagation is $O(L * N)$, which scale
 **Differentiability**: The network's activation functions and loss function must be differentiable. This is essential for gradient-based optimization methods like backpropagation to calculate gradients and update the network's parameters.
 
 ### 14. The function SoftMax and the loss of cross-entropy are often used together and their gradient is very simple. Show that the loss can be simplified by $$ l=-\sum_i y_i \tilde{y_i} + log (\sum_i \exp(\tilde{y_i})$$
-![[Pasted image 20231030114802.png]]
+![300](./images/Pasted%20image%2020231030114802.png)
 
 ### 15. Write the gradient of the loss (cross-entropy ) relative to the intermediate output $\tilde{y}$
 
-![[Pasted image 20231012222543.png]]
-![[Pasted image 20231030125102.png]]
+![300](./images/Pasted%20image%2020231012222543.png)
+![300](./images/Pasted%20image%2020231030125102.png)
 
 ### 16. Using the backpropagation, write the gradient of the loss with respect to the weights of the output layer $∇_{W_y}l$. Note that writing this gradient uses $∇_{\tilde{y}}l$. Do the same for $∇_{b_y}l$ .
 
-![[Pasted image 20231030123940.png]]
-![[Pasted image 20231030130903.png]]
+![300](./images/Pasted%20image%2020231030123940.png)
+![300](./images/Pasted%20image%2020231030130903.png)
 
 
 ### 17.  Compute other gradients : $∇_\tilde{h} l$, $∇_{W_h}l$, $∇_{b_h}l$ 
 
-![[Pasted image 20231030124011.png]]
-![[Pasted image 20231030124024.png]]
-![[Pasted image 20231030124040.png]]
-![[Pasted image 20231030124056.png]]
+![300](./images/Pasted%20image%2020231030124011.png)
+![300](./images/Pasted%20image%2020231030124024.png)
+![300](./images/Pasted%20image%2020231030124040.png)
+![300](./images/Pasted%20image%2020231030124056.png)
