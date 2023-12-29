@@ -6,9 +6,8 @@
 
 conda activate rdfia
 
-echo "Modify ngf or ndf. In particular, reduce or increase one of the two significantly."
-
 test_index=0
+echo "Modify ngf or ndf. In particular, reduce or increase one of the two significantly."
 python test_gan.py --ngf=64 --savepath="ngf64"
 python test_gan.py --ngf=128 --savepath="ngf128"
 python test_gan.py --ngf=256 --savepath="ngf256"
@@ -16,7 +15,6 @@ python test_gan.py --ngf=256 --savepath="ngf256"
 python test_gan.py --ndf=64 --savepath="ndf64"
 python test_gan.py --ndf=128 --savepath="ndf128"
 python test_gan.py --ndf=256 --savepath="ndf256"
-
 echo "Finish $test_index"
 
 test_index=1
@@ -25,18 +23,21 @@ python test_gan.py --lr-d=0.0001 --lr-g=0.0003 --savepath="lrdg_custom_00001_000
 python test_gan.py --lr-d=0.1 --lr-g=0.1 --savepath="lrdg_custom_01_01"
 python test_gan.py --lr-d=0.1 --savepath="lrd_custom_01"
 python test_gan.py --lr-g=0.1 --savepath="lrg_custom_01"
-
 echo "Finish $test_index"
 
 test_index=2
 echo "Learn for longer (e.g., 30 epochs) even if it seems that the model already generates correct images."
 python test_gan.py --epochs=30 --savepath="epochs30"
-
+python test_gan.py --epochs=100 --savepath="epochs100"
 echo "Finish $test_index"
 
 test_index=3
 echo "Reduce or increase significantly nz (e.g., nz = 10 or 1000)."
 python test_gan.py --nz=10 --savepath="nz10"
 python test_gan.py --nz=1000 --savepath="nz1000"
+echo "Finish $test_index"
 
+test_index=4
+echo "Replace the custom weight initialization with pytorch's default initialization"
+python test_gan.py --init-type=pytorch --savepath="init_pytorch"
 echo "Finish $test_index"
