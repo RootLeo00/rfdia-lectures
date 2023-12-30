@@ -29,17 +29,18 @@ which in the beginning would be going to 1
 We train our network with the given parameters, and we obtain images that are quite good and diverse. The loss curves of the generator and discriminator are not stable because the two networks are adversaries. When the generator's loss decreases, the discriminator's loss increases, and vice versa. This is because they are in a continual adversarial competition – when one network tries to reduce its loss, the other network responds by attempting to increase it, creating a dynamic and fluctuating relationship.
 
 ***Baseline**:*
-*ngf=32 -> Channel size before the last layer in Generator*
-*ndf=32 -> Channel size in Discriminator*
-*weight_init="custom" -> Weight initialization type*
-*loss_type=default -> Type of training loss for the generator*
-*lr_d=0.0002 -> Learning rate for the discriminator*
-*lr_g=0.0005 -> Learning rate for the generator*
-*beta1=0.5 -> Beta1 for Adam optimizer*
-*epochs=5 -> Number of training epochs*
-*nz=100 -> Latent size*
-*batch_size=12 -> Batch size*
-*nchannels=1 -> Number of channels for inputs of Discriminator*
+	*ngf=32 -> Channel size before the last layer in Generator*
+	*ndf=32 -> Channel size in Discriminator*
+	*weight_init="custom" -> Weight initialization type*
+	*loss_type=default -> Type of training loss for the generator*
+	*lr_d=0.0002 -> Learning rate for the discriminator*
+	*lr_g=0.0005 -> Learning rate for the generator*
+	*beta1=0.5 -> Beta1 for Adam optimizer*
+	*epochs=5 -> Number of training epochs*
+	*nz=100 -> Latent size*
+	*batch_size=12 -> Batch size*
+	*nchannels=1 -> Number of channels for inputs of Discriminator*
+
 ![300](./images/Pasted%20image%2020231228111114.png)![300](./images/Pasted%20image%2020231228112219.png)
 
 
@@ -117,6 +118,7 @@ It is important that the discriminator and generator have access to the y label 
 
 ## 8. Was your training more or less successful than the unconditional case ? Why ?
 Our training was more successful in the conditional case compared to the unconditional one, since the conditional variable helps refining the learning process. The training seems to be smoother and more effective, with less high spikes compared to the baseline of the unconditional gan. Also, in the end the discriminator loss is going upwards, while the generator loss is still decreasing and this is the behavior that we want to achieve.
+
 ![300](./images/Pasted%20image%2020231229115925.png)
 ![300](./images/Pasted%20image%2020231229115930.png)
 

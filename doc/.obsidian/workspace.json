@@ -11,8 +11,12 @@
             "id": "4e9f15b2d1753b60",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {}
+              "type": "markdown",
+              "state": {
+                "file": "2c-answers/Deep Learning Practical Work 2-c.md",
+                "mode": "source",
+                "source": false
+              }
             }
           }
         ]
@@ -81,6 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "2c-answers/Deep Learning Practical Work 2-c.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -97,6 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "2c-answers/Deep Learning Practical Work 2-c.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -118,7 +124,9 @@
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {}
+              "state": {
+                "file": "2c-answers/Deep Learning Practical Work 2-c.md"
+              }
             }
           }
         ]
@@ -140,6 +148,22 @@
   },
   "active": "4e9f15b2d1753b60",
   "lastOpenFiles": [
+    "2c-answers/Leonelli_Neubauer_Deep Learning Practical Work 2-c.pdf",
+    "2d-answers/Leonelli_Neubauer_Deep Learning Practical Work 2-de.pdf",
+    "Pasted image 20231229142741.png",
+    "Pasted image 20231229142728.png",
+    "2c-answers/Deep Learning Practical Work 2-c.pdf",
+    "2d-answers/Deep Learning Practical Work 2-de.md",
+    "2d-answers/Deep Learning Practical Work 2-de.pdf",
+    "2d-answers/Deep Learning Practical Work 2-de.tex",
+    "2d-answers/images/Pasted image 20231229113931.png",
+    "2d-answers/images/Pasted image 20231229115930.png",
+    "2d-answers/images/Pasted image 20231229115925.png",
+    "2d-answers/images/Pasted image 20231229115737.png",
+    "2d-answers/images/Pasted image 20231229115339.png",
+    "2d-answers/images/Pasted image 20231229115203.png",
+    "2d-answers/images/Pasted image 20231229115158.png",
+    "2d-answers/images/Pasted image 20231229114328.png",
     "1cd-answers/Deep Learning Practical Work 1cd.md",
     "1e-answers/Transformers.md",
     "1cd-answers/rdfia_1-cd.pdf",
@@ -148,20 +172,6 @@
     "1cd-answers/Deep Learning Practical Work 1cd.pdf",
     "1ab-answers/Deep Learning Practical Work 1-ab.pdf",
     "1e-answers/Transformers.pdf",
-    "1e-answers/images/Pasted image 20231107131058.png",
-    "1e-answers/images/Pasted image 20231107131048.png",
-    "1e-answers/images/Pasted image 20231102202815.png",
-    "1e-answers/images/Pasted image 20231102181533.png",
-    "1e-answers/images/Pasted image 20231102181450.png",
-    "1cd-answers/images/Pasted image 20231031004747.png",
-    "1cd-answers/images/Pasted image 20231030235949.png",
-    "1cd-answers/images/Pasted image 20231030233513.png",
-    "1cd-answers/images/Pasted image 20231030183306.png",
-    "1ab-answers/external-notes/gradient-notes.pdf",
-    "1ab-answers/external-notes/1ab-answer16-17_231021_142243.pdf",
-    "1ab-answers/external-notes/backpropagation_cheatsheet_less2.pdf",
-    "1ab-answers/external-notes",
-    "1cd-answers/images/Pasted image 20231021171542.png",
-    "1cd-answers/images"
+    "1ab-answers/external-notes/gradient-notes.pdf"
   ]
 }
